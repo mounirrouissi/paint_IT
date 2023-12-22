@@ -14,8 +14,8 @@ import * as m from './paraglide/messages'
 import {
   languageTag,
   onSetLanguageTag,
-  setLanguageTag,
 } from './paraglide/runtime'
+import FeedbackButton from './FeedbackButton'
 
 function App() {
   const [file, setFile] = useState<File>()
@@ -63,29 +63,7 @@ function App() {
         <div className="text-4xl font-bold text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out">
           Inpaint-web
         </div>
-        <div className="hidden md:flex justify-end w-[300px] mx-1 sm:mx-5">
-          <Button
-            className="mr-5 flex"
-            onClick={() => {
-              if (languageTag() === 'zh') {
-                setLanguageTag('en')
-              } else {
-                setLanguageTag('zh')
-              }
-            }}
-          >
-            <p>{languageTag() === 'en' ? 'to chinese' : 'en'}</p>
-          </Button>
-          <Button
-            className="w-38 flex sm:visible"
-            icon={<InformationCircleIcon className="w-6 h-6" />}
-            onClick={() => {
-              setShowAbout(true)
-            }}
-          >
-            <p>{m.feedback()}</p>
-          </Button>
-        </div>
+        <FeedbackButton/>
       </header>
 
       <main
@@ -150,7 +128,7 @@ function App() {
                 rel="noreferrer"
                 target="_blank"
               >
-                Inpaint-web
+                Paint it
               </a>{' '}
               反馈
             </p>
