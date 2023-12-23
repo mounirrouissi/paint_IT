@@ -492,28 +492,29 @@ export default function Editor(props: EditorProps) {
   }, [file, lines, original.naturalHeight, original.naturalWidth, renders])
 
   return (
+<div className='flex flex-row h-full justify-stretch'>
+<div
+      ref={historyListRef}
+      style={{
+        height: '100%',
+      }}
+      className={[
+        'flex-shrink-0',
+        'mt-4 border p-3 rounded',
+        'flex items-left h-full max-w-4xl',
+        'space-x-0 flex-col space-y-5',
+        'scrollbar-thin scrollbar-thumb-black scrollbar-track-primary overflow-x-scroll',
+      ].join(' ')}
+    >
+      {History}
+    </div>
     <div
       className={[
-        'flex flex-col items-center h-full justify-between',
+        'flex flex-col items-center ',
         isInpaintingLoading ? 'animate-pulse-fast pointer-events-none' : '',
       ].join(' ')}
     >
-      {/* History */}
-      <div
-        ref={historyListRef}
-        style={{
-          height: '116px',
-        }}
-        className={[
-          'flex-shrink-0',
-          'mt-4 border p-3 rounded',
-          'flex items-left w-full max-w-4xl',
-          'space-y-0 flex-row space-x-5',
-          'scrollbar-thin scrollbar-thumb-black scrollbar-track-primary overflow-x-scroll',
-        ].join(' ')}
-      >
-        {History}
-      </div>
+    
       {/* 画图 */}
       <div
         className={[
@@ -703,5 +704,11 @@ export default function Editor(props: EditorProps) {
         </Button>
       </div>
     </div>
+     
+    </div>
   )
 }
+
+
+
+// explianed here : docs/Editor.txt
