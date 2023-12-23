@@ -157,3 +157,11 @@ export function resizeImageFile(
     reader.readAsDataURL(file)
   })
 }
+function isMobile() {
+  return /Mobi|Android/i.test(navigator.userAgent);
+}
+
+export const isSmallScreen = () => {
+  const breakpoint = 768;
+  return window.innerWidth < breakpoint;
+};
