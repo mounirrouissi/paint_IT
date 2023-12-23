@@ -31,4 +31,3 @@ export default {
 
 
 
-live example https://cleanup.pictures/

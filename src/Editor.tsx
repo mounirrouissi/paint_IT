@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { DownloadIcon, EyeIcon, ViewBoardsIcon } from '@heroicons/react/outline'
+import { DownloadIcon, EyeIcon, ViewBoardsIcon, ZoomInIcon } from '@heroicons/react/outline'
 import { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useWindowSize } from 'react-use'
 import inpaint from './adapters/inpainting'
@@ -51,6 +51,9 @@ export default function Editor(props: EditorProps) {
   const [original, isOriginalLoaded] = useImage(file)
   const [renders, setRenders] = useState<HTMLImageElement[]>([])
   const [showSlider, setShowSlider] = useState(false)
+  const [isZoomActive, setZoomActive] = useState(false)
+  const [zoomLevel, setZoomLevel] = useState(1);
+
   const [context, setContext] = useState<CanvasRenderingContext2D>()
   const [maskCanvas] = useState<HTMLCanvasElement>(() => {
     return document.createElement('canvas')
@@ -492,6 +495,11 @@ export default function Editor(props: EditorProps) {
     }
   }, [file, lines, original.naturalHeight, original.naturalWidth, renders])
 
+  const handleZoomClick = () => {
+    setZoomActive(!isZoomActive)
+    setZoomLevel(prev => prev + 0.1);
+  }
+
   return (
     <div
       className={[
@@ -724,7 +732,19 @@ export default function Editor(props: EditorProps) {
           />
         )}
 
-
+<Button
+        className='flex flex-col' 
+        title="See original"
+          primary={isZoomActive}
+          icon={<ZoomInIcon className="w-10 h-7 self-center  " />}
+          onUp={() => {
+            setShowOriginal(!showOriginal)
+            setTimeout(() => setSeparatorLeft(0), 300)
+          }}
+          onClick={handleZoomClick()} 
+        >
+           {/* <span className="text-xs">{m.original()}</span>  */}
+        </Button>
 
         <Button
         className='flex flex-col' 
@@ -767,5 +787,3 @@ export default function Editor(props: EditorProps) {
     </div>
   )
 }
-
-
