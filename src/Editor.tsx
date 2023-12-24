@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
+
 import { DownloadIcon, EyeIcon, ViewBoardsIcon, ZoomInIcon } from '@heroicons/react/outline'
 import { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useWindowSize } from 'react-use'
@@ -628,10 +629,10 @@ export default function Editor(props: EditorProps) {
     
   }}
          className={[
-          'History  order-1 lg:order-1 mr-2',
+          'History  lg:order-1 mr-2',
           'mt-4 border p-2 rounded',
-          'row-span-1  lg:col-span-1 col-span-4  items-center  lg:h-full  gap-3 flex  justify-between lg:w-auto  ',
-          ' lg:space-y-2 sm:space-y-0  ml-2',
+          'row-span-1  lg:col-span-1 col-span-4  items-center    gap-3 flex  justify-between lg:justify-center lg:w-auto  ',
+          ' sm:space-y-0  ml-2',
           'scrollbar-thin scrollbar-thumb-slate-400  overflow-y-scroll  overflow-x-scroll',
          ].join(' ')}
        >
@@ -733,15 +734,11 @@ export default function Editor(props: EditorProps) {
         )}
 
 <Button
-        className='flex flex-col' 
+        
         title="See original"
           primary={isZoomActive}
           icon={<ZoomInIcon className="w-10 h-7 self-center  " />}
-          onUp={() => {
-            setShowOriginal(!showOriginal)
-            setTimeout(() => setSeparatorLeft(0), 300)
-          }}
-          onClick={handleZoomClick()} 
+          onClick={()=>handleZoomClick()} 
         >
            {/* <span className="text-xs">{m.original()}</span>  */}
         </Button>

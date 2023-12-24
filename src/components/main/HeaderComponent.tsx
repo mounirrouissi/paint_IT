@@ -1,4 +1,4 @@
-import { ArrowLeftIcon } from '@heroicons/react/outline'
+import { ArrowLeftIcon, LoginIcon, LogoutIcon } from '@heroicons/react/outline'
 import { useState } from 'react'
 import Button from '../Button'
 import { languageTag, setLanguageTag } from '../../paraglide/runtime'
@@ -12,7 +12,7 @@ interface HeaderProps {
 
 const HeaderComponent = ({ file, setFile }: HeaderProps) => {
     return (
-        <header className="z-10 shadow flex flex-row items-center md:justify-between h-14">
+        <header className="z-10 shadow flex flex-row items-center justify-between h-14">
             <Button
                 className={[
                     file ? '' : 'opacity-40 pointer-events-none',
@@ -30,20 +30,21 @@ const HeaderComponent = ({ file, setFile }: HeaderProps) => {
                 </div>
             </Button>
 
-            <div className="text-4xl font-bold text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out">
+            <div className="hidden md:block text-4xl font-bold text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out">
                 Paint IT
             </div>
 
-            <div className="hidden md:flex justify-end w-[300px] mx-1 sm:mx-5">
+            <div className="flex justify-end  w-[300px]  sm:mx-5">
 
                 <Button
-                    className="mr-5 flex"
-                    icon={<ArchiveIcon className="w-6 h-6" />}
+                    className="mr-5 "
+                    icon={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>}
                 >
-                    <p>Archive</p>
+                    <p className='hidden md:block'>Archive</p>
                 </Button>
 
-                <Button
+           {/*      <Button
+                className='hidden md:block'
                     onClick={() => {
                         if (languageTag() === 'zh') {
                             setLanguageTag('en')
@@ -53,7 +54,7 @@ const HeaderComponent = ({ file, setFile }: HeaderProps) => {
                     }}
                 >
                     <p>{languageTag() === 'en' ? 'to chinese' : 'en'}</p>
-                </Button>
+                </Button> */}
             </div>
         </header>
     )
