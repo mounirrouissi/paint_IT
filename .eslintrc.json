@@ -3,11 +3,9 @@
     "airbnb",
     "airbnb/hooks",
     "plugin:@typescript-eslint/recommended",
-    "prettier",
-    "plugin:prettier/recommended",
     "plugin:react/jsx-runtime"
   ],
-  "plugins": ["@typescript-eslint", "react", "react-hooks", "prettier"],
+  "plugins": ["@typescript-eslint", "react", "react-hooks"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
@@ -18,20 +16,19 @@
     "project": "./tsconfig.json"
   },
   "rules": {
+    "operator-linebreak": "off",
+    "arrow-parens": "off" ,
+    "brace-style": "off" ,// turn off the rule entirely,
+    "comma-dangle": "off" ,// turn off the rule entirely  
+    "space-before-blocks": "off" ,// turn off the rule entirely
+    "implicit-arrow-linebreak": "off",
+    "semi": "off" ,
     "import/no-unresolved": 0,
     "react/jsx-no-bind": "off",
     "react/jsx-filename-extension": [
       1,
       {
         "extensions": [".ts", ".tsx"]
-      }
-    ],
-    "prettier/prettier": [
-      "error",
-      {
-        "singleQuote": true,
-        "arrowParens": "avoid",
-        "endOfLine": "auto"
       }
     ],
     "consistent-return": "off",
@@ -49,6 +46,19 @@
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "no-debugger": "warn"
+    "for-direction": "off",
+    "getter-return": "off",
+    "no-compare-neg-zero": "off",
+    "no-cond-assign": "off",
+    "no-console": "off",
+    "no-constant-condition": "off",
+    "no-control-regex": "off",
+    "no-debugger": "off",
+    "no-dupe-args": "off",
+    "no-dupe-keys": "off",
+    "no-duplicate-case": "off",
+    "no-empty": "off",
+    "no-empty-character-class": "off",
+    "no-ex-assign": "off"
   }
 }

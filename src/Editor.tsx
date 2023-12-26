@@ -1,13 +1,14 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { DownloadIcon, EyeIcon, ViewBoardsIcon } from '@heroicons/react/outline'
+
+import { DownloadIcon, EyeIcon, ViewBoardsIcon, ZoomInIcon } from '@heroicons/react/outline'
 import { useCallback, useEffect, useState, useRef, useMemo } from 'react'
 import { useWindowSize } from 'react-use'
 import inpaint from './adapters/inpainting'
 import superResolution from './adapters/superResolution'
 import Button from './components/Button'
 import Slider from './components/Slider'
-import { downloadImage, loadImage, useImage } from './utils'
+import { downloadImage, isSmallScreen, loadImage, useImage } from './utils'
 import Progress from './components/Progress'
 import { modelExists, downloadModel } from './adapters/cache'
 import Modal from './components/Modal'
@@ -50,6 +51,10 @@ export default function Editor(props: EditorProps) {
   const [brushSize, setBrushSize] = useState(40)
   const [original, isOriginalLoaded] = useImage(file)
   const [renders, setRenders] = useState<HTMLImageElement[]>([])
+  const [showSlider, setShowSlider] = useState(false)
+  const [isZoomActive, setZoomActive] = useState(false)
+  const [zoomLevel, setZoomLevel] = useState(1);
+
   const [context, setContext] = useState<CanvasRenderingContext2D>()
   const [maskCanvas] = useState<HTMLCanvasElement>(() => {
     return document.createElement('canvas')
@@ -491,135 +496,149 @@ export default function Editor(props: EditorProps) {
     }
   }, [file, lines, original.naturalHeight, original.naturalWidth, renders])
 
+  const handleZoomClick = () => {
+    setZoomActive(!isZoomActive)
+    setZoomLevel(prev => prev + 0.1);
+  }
+
   return (
     <div
       className={[
-        'flex flex-col items-center h-full justify-between',
+        'flex flex-col  justify-between h-full mx-4 md:mx-0',
         isInpaintingLoading ? 'animate-pulse-fast pointer-events-none' : '',
       ].join(' ')}
     >
-      {/* History */}
-      <div
-        ref={historyListRef}
-        style={{
-          height: '116px',
-        }}
-        className={[
-          'flex-shrink-0',
-          'mt-4 border p-3 rounded',
-          'flex items-left w-full max-w-4xl',
-          'space-y-0 flex-row space-x-5',
-          'scrollbar-thin scrollbar-thumb-black scrollbar-track-primary overflow-x-scroll',
-        ].join(' ')}
-      >
-        {History}
-      </div>
-      {/* 画图 */}
-      <div
-        className={[
-          'flex-grow',
-          'flex justify-center',
-          'my-2',
-          'relative',
-        ].join(' ')}
-        style={{
-          width: '70vw',
-        }}
-        ref={canvasDiv}
-      >
-        <div className="relative">
-          <canvas
-            className="rounded-sm"
-            style={showBrush ? { cursor: 'none' } : {}}
-            ref={r => {
-              if (r && !context) {
-                const ctx = r.getContext('2d')
-                if (ctx) {
-                  setContext(ctx)
-                }
-              }
-            }}
-          />
-          <div
-            className={[
-              'absolute top-0 right-0 pointer-events-none',
-              showOriginal ? '' : 'overflow-hidden',
-            ].join(' ')}
-            style={{
-              width: showOriginal ? `${context?.canvas.width}px` : '0px',
-              height: context?.canvas.height,
-              transitionProperty: 'width, height',
-              transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
-              transitionDuration: '300ms',
-            }}
-            ref={r => {
-              if (r && !originalImg) {
-                setOriginalImg(r)
-              }
-            }}
-          >
-            <div
-              className={[
-                'absolute top-0 right-0 pointer-events-none z-10',
-                useSeparator ? 'bg-black text-white' : 'bg-primary ',
-                'w-1',
-                'flex items-center justify-center',
-                'separator',
-              ].join(' ')}
-              style={{
-                left: `${separatorLeft}px`,
-                height: context?.canvas.height,
-                transitionProperty: 'width, height',
-                transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
-                transitionDuration: '300ms',
-              }}
-            >
-              <span className="absolute left-1 bottom-0 p-1 bg-opacity-25 bg-black rounded text-white select-none">
-                original
-              </span>
-              <div
-                className={[
-                  'absolute py-2 px-1 rounded-md pointer-events-auto',
-                  useSeparator ? 'bg-black' : 'bg-primary ',
-                ].join(' ')}
-                style={{ cursor: 'ew-resize' }}
-                ref={r => {
-                  if (r && !separator) {
-                    setSeparator(r)
-                  }
-                }}
-              >
-                <ViewBoardsIcon
-                  className="w-5 h-5"
-                  style={{ cursor: 'ew-resize' }}
-                />
-              </div>
-            </div>
-            <img
-              className="absolute right-0"
-              src={original.src}
-              alt="original"
-              width={`${context?.canvas.width}px`}
-              height={`${context?.canvas.height}px`}
-              style={{
-                width: `${context?.canvas.width}px`,
-                height: `${context?.canvas.height}px`,
-                maxWidth: 'none',
-                clipPath: `inset(0 0 0 ${separatorLeft}px)`,
-              }}
-            />
-          </div>
-          {isInpaintingLoading && (
-            <div className="z-10 bg-white absolute bg-opacity-80 top-0 left-0 right-0 bottom-0  h-full w-full flex justify-center items-center">
-              <div ref={modalRef} className="text-xl space-y-5 w-4/5 sm:w-1/2">
-                <p>正在处理中，请耐心等待。。。</p>
-                <p>It is being processed, please be patient...</p>
-                <Progress percent={generateProgress} />
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+     
+    <div className=" grid grid-rows-4 lg:grid-cols-5  h-4/5 lg:h-full justify-between  bg-red-500" >
+      
+     
+       {/* canva */}
+
+         <div
+           className={[
+            'Canva',
+            'lg:order-2  row-span-3 col-span-4 flex lg:flex-row justify-center ',
+            'mt-1',
+            'bg-yellow-500',
+           ].join(' ')}
+           style={{
+         
+         
+          }}
+           ref={canvasDiv}
+         >
+           <div className="relative">
+             <canvas
+               className="rounded-sm"
+               style={showBrush ? { cursor: 'none' } : {}}
+               ref={r => {
+                 if (r && !context) {
+                   const ctx = r.getContext('2d')
+                   if (ctx) {
+                     setContext(ctx)
+                   }
+                 }
+               }}
+             />
+             <div
+               className={[
+                 'absolute top-0 right-0 pointer-events-none',
+                 showOriginal ? '' : 'overflow-hidden',
+               ].join(' ')}
+               style={{
+                 width: showOriginal ? `${context?.canvas.width}px` : '0px',
+                 height: context?.canvas.height,
+                 transitionProperty: 'width, height',
+                 transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                 transitionDuration: '300ms',
+               }}
+               ref={r => {
+                 if (r && !originalImg) {
+                   setOriginalImg(r)
+                 }
+               }}
+             >
+               <div
+                 className={[
+                   'absolute top-0 right-0 pointer-events-none z-10',
+                   useSeparator ? 'bg-black text-white' : 'bg-primary ',
+                   'w-1',
+                   'flex items-center justify-center',
+                   'separator',
+                 ].join(' ')}
+                 style={{
+                   left: `${separatorLeft}px`,
+                   height: context?.canvas.height,
+                   transitionProperty: 'width, height',
+                   transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+                   transitionDuration: '300ms',
+                 }}
+               >
+                 <span className="absolute left-1 bottom-0 p-1 bg-opacity-25 bg-black rounded text-white select-none">
+                   original
+                 </span>
+                 <div
+                   className={[
+                     'absolute py-2 px-1 rounded-md pointer-events-auto',
+                     useSeparator ? 'bg-black' : 'bg-primary ',
+                   ].join(' ')}
+                   style={{ cursor: 'ew-resize' }}
+                   ref={r => {
+                     if (r && !separator) {
+                       setSeparator(r)
+                     }
+                   }}
+                 >
+                   <ViewBoardsIcon
+                     className="w-5 h-5"
+                     style={{ cursor: 'ew-resize' }}
+                   />
+                 </div>
+               </div>
+               <img
+                 className="absolute right-0"
+                 src={original.src}
+                 alt="original"
+                 width={`${context?.canvas.width}px`}
+                 height={`${context?.canvas.height}px`}
+                 style={{
+                   width: `${context?.canvas.width}px`,
+                   height: `${context?.canvas.height}px`,
+                   maxWidth: 'none',
+                   clipPath: `inset(0 0 0 ${separatorLeft}px)`,
+                 }}
+               />
+             </div>
+             {isInpaintingLoading && (
+               <div className="z-10 bg-white absolute bg-opacity-80 top-0 left-0 right-0 bottom-0  h-full w-full flex justify-center items-center">
+                 <div ref={modalRef} className="text-xl space-y-5 w-4/5 sm:w-1/2">
+                   <p>正在处理中，请耐心等待。。。</p>
+                   <p>It is being processed, please be patient...</p>
+                   <Progress percent={generateProgress} />
+                 </div>
+               </div>
+             )}
+           </div>
+         </div>
+
+       {/* History */}
+      
+       <div
+         ref={historyListRef}
+          style={{
+    
+  }}
+         className={[
+          'History  lg:order-1 mr-2',
+          'mt-4 border p-2 rounded',
+          'row-span-1 h-fit col-span-4  lg:col-span-1 lg:row-span-3   items-center    gap-3 flex lg:flex-col justify-between lg:justify-start lg:w-fit lg:p-2 ',
+          ' sm:space-y-0  ml-2',
+          'scrollbar-thin scrollbar-thumb-slate-400  overflow-y-scroll  overflow-x-scroll',
+         ].join(' ')}
+       >
+         {History}
+       </div>
+    </div>
 
       {!downloaded && (
         <Modal>
@@ -640,13 +659,14 @@ export default function Editor(props: EditorProps) {
           ref={brushRef}
         />
       )}
-      {/* 工具栏 */}
+      
+      {/* Bottom sheet*/}
       <div
         className={[
-          'flex-shrink-0',
-          'bg-white rounded-md border border-gray-300 hover:border-gray-400 shadow-md hover:shadow-lg p-4 transition duration-200 ease-in-out',
-          'flex items-center w-full max-w-4xl py-6 mb-4, justify-between',
-          'flex-col space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5',
+          'bottom_sheet   fixed bottom-2  lg:bottom-5  mx-10 my-2  flex-shrink-0',
+          'bg-white rounded-md border border-gray-300 hover:border-gray-400 shadow-md hover:shadow-lg p-2 transition duration-200 ease-in-out',
+          'flex items-center w-full self-center max-w-4xl py-6 mb-4, justify-between',
+          'space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5',
         ].join(' ')}
       >
         {renders.length > 0 && (
@@ -669,38 +689,97 @@ export default function Editor(props: EditorProps) {
               </svg>
             }
           >
-            {m.undo()}
+            <span className='hidden md:block'>{m.undo()}</span>
           </Button>
         )}
-        <Slider
-          label={m.bruch_size()}
-          min={10}
-          max={200}
-          value={brushSize}
-          onChange={handleSliderChange}
-          onStart={handleSliderStart}
-        />
+       
+      <div className="block sm:hidden">
+        
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            onClick={() => setShowSlider(!showSlider)}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"
+            />
+          </svg>
+      </div>
+      <div className="hidden md:block">
+          <Slider
+            label={m.bruch_size()}
+            min={10}
+            max={200}
+            value={brushSize}
+            onChange={handleSliderChange}
+            onStart={handleSliderStart}
+          />
+        </div>
+
+        {showSlider && (
+          <Slider
+            label={m.bruch_size()}
+            min={10}
+            max={200}
+            value={brushSize}
+            onChange={handleSliderChange}
+            onStart={handleSliderStart}
+          />
+        )}
+
+<Button
+        
+        title="See original"
+          primary={isZoomActive}
+          icon={<ZoomInIcon className="w-10 h-7 self-center  " />}
+          onClick={()=>handleZoomClick()} 
+        >
+           {/* <span className="text-xs">{m.original()}</span>  */}
+        </Button>
+
         <Button
+        className='flex flex-col' 
+        title="See original"
           primary={showOriginal}
-          icon={<EyeIcon className="w-6 h-6" />}
+          icon={<EyeIcon className="w-10 h-7 self-center  " />}
           onUp={() => {
             setShowOriginal(!showOriginal)
             setTimeout(() => setSeparatorLeft(0), 300)
           }}
         >
-          {m.original()}
+           {/* <span className="text-xs">{m.original()}</span>  */}
         </Button>
         {!showOriginal && (
           <Button onUp={onSuperResolution}>{m.upscale()}</Button>
         )}
 
-        <Button
-          primary
-          icon={<DownloadIcon className="w-6 h-6" />}
-          onClick={download}
-        >
-          {m.download()}
-        </Button>
+        {isSmallScreen() ? (
+          <div className="fixed top-10 right-4 p-2 ">
+            <Button
+            className='bg-transparent'
+              primary
+              icon={<DownloadIcon className="w-6 h-6" />}
+              onClick={download}
+            >
+              <span className='hidden md:block'>{m.download()}</span>
+            </Button>
+          </div>
+        ) : (
+          <Button
+            primary
+            icon={<DownloadIcon className="w-6 h-6" />}
+            onClick={download}
+          >
+            <span className='hidden md:block'>{m.download()}</span>
+          </Button>
+        )}
+
       </div>
     </div>
   )

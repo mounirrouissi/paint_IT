@@ -16,9 +16,13 @@ import {
   onSetLanguageTag,
   setLanguageTag,
 } from './paraglide/runtime'
+import FeedbackButton from './components/main'
+import HeaderComponent from './components/main/header/HeaderComponent'
+import LoginComponent from './components/auth/LoginComponent'
 
 function App() {
   const [file, setFile] = useState<File>()
+  const [openLoginForm, setOpenLoginForm] = useState(false)
   const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh'>('en')
 
   onSetLanguageTag(() => setStateLanguageTag(languageTag()))
@@ -29,6 +33,7 @@ function App() {
   const [downloadProgress, setDownloadProgress] = useState(100)
 
   useEffect(() => {
+    console.log(openLoginForm)
     downloadModel('inpaint', setDownloadProgress)
   }, [])
 
@@ -41,52 +46,15 @@ function App() {
     setFile(new File([imgBlob], `${img}.jpeg`, { type: 'image/jpeg' }))
   }
 
+  const setOpenLoginForm1=() => {
+    console.log("HHHHHHHHHHHHHHHHHHH")
+    setOpenLoginForm(!openLoginForm)
+  }
   return (
     <div className="min-h-full flex flex-col">
-      <header className="z-10 shadow flex flex-row items-center md:justify-between h-14">
-        <Button
-          className={[
-            file ? '' : 'opacity-40 pointer-events-none',
-            'pl-1 pr-1 mx-1 sm:mx-5',
-          ].join(' ')}
-          icon={<ArrowLeftIcon className="w-6 h-6" />}
-          onClick={() => {
-            setFile(undefined)
-          }}
-        >
-          <div className="md:w-[290px]">
-            <span className="hidden sm:inline select-none">
-              {m.start_new()}
-            </span>
-          </div>
-        </Button>
-        <div className="text-4xl font-bold text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out">
-          Inpaint-web
-        </div>
-        <div className="hidden md:flex justify-end w-[300px] mx-1 sm:mx-5">
-          <Button
-            className="mr-5 flex"
-            onClick={() => {
-              if (languageTag() === 'zh') {
-                setLanguageTag('en')
-              } else {
-                setLanguageTag('zh')
-              }
-            }}
-          >
-            <p>{languageTag() === 'en' ? 'to chinese' : 'en'}</p>
-          </Button>
-          <Button
-            className="w-38 flex sm:visible"
-            icon={<InformationCircleIcon className="w-6 h-6" />}
-            onClick={() => {
-              setShowAbout(true)
-            }}
-          >
-            <p>{m.feedback()}</p>
-          </Button>
-        </div>
-      </header>
+      
+      <HeaderComponent file={file} setFile={setFile} setOpenLoginForm1={setOpenLoginForm1}/>
+
 
       <main
         style={{
@@ -113,7 +81,7 @@ function App() {
               <div className="flex flex-col sm:flex-row pt-10 items-center justify-center cursor-pointer">
                 <span className="text-gray-500">{m.try_it_images()}</span>
                 <div className="flex space-x-2 sm:space-x-4 px-4">
-                  {['dog', 'car', 'bird', 'bag', 'jacket', 'shoe', 'paris'].map(
+                  {['dog', 'car', 'bird'].map(
                     image => (
                       <div
                         key={image}
@@ -138,38 +106,7 @@ function App() {
         )}
       </main>
 
-      {showAbout && (
-        <Modal>
-          <div ref={modalRef} className="text-xl space-y-5">
-            <p>
-              {' '}
-              任何问题到:{' '}
-              <a
-                href="https://github.com/lxfater/inpaint-web"
-                style={{ color: 'blue' }}
-                rel="noreferrer"
-                target="_blank"
-              >
-                Inpaint-web
-              </a>{' '}
-              反馈
-            </p>
-            <p>
-              {' '}
-              For any questions, please go to:{' '}
-              <a
-                href="https://github.com/lxfater/inpaint-web"
-                style={{ color: 'blue' }}
-                rel="noreferrer"
-                target="_blank"
-              >
-                Inpaint-web
-              </a>{' '}
-              to provide feedback.
-            </p>
-          </div>
-        </Modal>
-      )}
+     
       {!(downloadProgress === 100) && (
         <Modal>
           <div className="text-xl space-y-5">
@@ -178,6 +115,11 @@ function App() {
           </div>
         </Modal>
       )}
+
+
+    <FeedbackButton/>
+    {openLoginForm && <LoginComponent/>}
+
     </div>
   )
 }

@@ -3,6 +3,7 @@ import { ReactNode, useState } from 'react'
 interface ButtonProps {
   children: ReactNode
   className?: string
+  title?: string
   icon?: ReactNode
   primary?: boolean
   style?: {
@@ -22,6 +23,7 @@ export default function Button(props: ButtonProps) {
     icon,
     primary,
     style,
+    title,
     onClick,
     onDown,
     onUp,
@@ -62,11 +64,12 @@ export default function Button(props: ButtonProps) {
       }}
       tabIndex={-1}
       className={[
-        'inline-flex space-x-3 py-3 px-5 rounded-md cursor-pointer',
+        'inline-flex  space-x-2 md:space-x-2  py-3 px-5 rounded-md cursor-pointer',
         background,
         className,
       ].join(' ')}
       style={style}
+      title={title}
     >
       {icon}
       <span className="whitespace-nowrap select-none">{children}</span>
