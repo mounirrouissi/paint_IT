@@ -17,10 +17,12 @@ import {
   setLanguageTag,
 } from './paraglide/runtime'
 import FeedbackButton from './components/main'
-import HeaderComponent from './components/main/HeaderComponent'
+import HeaderComponent from './components/main/header/HeaderComponent'
+import LoginComponent from './components/auth/LoginComponent'
 
 function App() {
   const [file, setFile] = useState<File>()
+  const [openLoginForm, setOpenLoginForm] = useState(false)
   const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh'>('en')
 
   onSetLanguageTag(() => setStateLanguageTag(languageTag()))
@@ -31,6 +33,7 @@ function App() {
   const [downloadProgress, setDownloadProgress] = useState(100)
 
   useEffect(() => {
+    console.log(openLoginForm)
     downloadModel('inpaint', setDownloadProgress)
   }, [])
 
@@ -43,10 +46,14 @@ function App() {
     setFile(new File([imgBlob], `${img}.jpeg`, { type: 'image/jpeg' }))
   }
 
+  const setOpenLoginForm1=() => {
+    console.log("HHHHHHHHHHHHHHHHHHH")
+    setOpenLoginForm(!openLoginForm)
+  }
   return (
     <div className="min-h-full flex flex-col">
       
- <HeaderComponent file={file} setFile={setFile} />
+      <HeaderComponent file={file} setFile={setFile} setOpenLoginForm1={setOpenLoginForm1}/>
 
 
       <main
@@ -110,7 +117,8 @@ function App() {
       )}
 
 
-    <FeedbackButton />
+    <FeedbackButton/>
+    {openLoginForm && <LoginComponent/>}
 
     </div>
   )

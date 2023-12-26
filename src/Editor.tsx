@@ -631,7 +631,7 @@ export default function Editor(props: EditorProps) {
          className={[
           'History  lg:order-1 mr-2',
           'mt-4 border p-2 rounded',
-          'row-span-1  lg:col-span-1 col-span-4  items-center    gap-3 flex  justify-between lg:justify-center lg:w-auto  ',
+          'row-span-1 h-fit col-span-4  lg:col-span-1 lg:row-span-3   items-center    gap-3 flex lg:flex-col justify-between lg:justify-start lg:w-fit lg:p-2 ',
           ' sm:space-y-0  ml-2',
           'scrollbar-thin scrollbar-thumb-slate-400  overflow-y-scroll  overflow-x-scroll',
          ].join(' ')}
@@ -663,7 +663,7 @@ export default function Editor(props: EditorProps) {
       {/* Bottom sheet*/}
       <div
         className={[
-          'bottom_sheet mx-10 my-2  flex-shrink-0',
+          'bottom_sheet   fixed bottom-2  lg:bottom-5  mx-10 my-2  flex-shrink-0',
           'bg-white rounded-md border border-gray-300 hover:border-gray-400 shadow-md hover:shadow-lg p-2 transition duration-200 ease-in-out',
           'flex items-center w-full self-center max-w-4xl py-6 mb-4, justify-between',
           'space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5',

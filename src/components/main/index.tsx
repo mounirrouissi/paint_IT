@@ -1,3 +1,3 @@
-import FeedbackButton from "./FeedbackButton";
+import FeedbackButton from "./footer/FeedbackButton";
 
 export default FeedbackButton
