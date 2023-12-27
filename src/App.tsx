@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { ArrowLeftIcon, InformationCircleIcon } from '@heroicons/react/outline'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { useClickAway } from 'react-use'
 import Button from './components/Button'
 import FileSelect from './components/FileSelect'
@@ -19,12 +19,23 @@ import {
 import FeedbackButton from './components/main'
 import HeaderComponent from './components/main/header/HeaderComponent'
 import LoginComponent from './components/auth/LoginComponent'
+import {
+  BrowserRouter,
+  Route,
+  Routes
+} from 'react-router-dom';
+import OAuth2RedirectHandler from './components/auth/oauth2/OAuth2RedirectHandler'
+import useAuth, { AuthContext } from './components/auth/AuthContext'
+import DropdownComponent from './components/main/header/DropdownComponent'
 
 function App() {
   const [file, setFile] = useState<File>()
   const [openLoginForm, setOpenLoginForm] = useState(false)
   const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh'>('en')
+  const auth = useAuth()
 
+
+  
   onSetLanguageTag(() => setStateLanguageTag(languageTag()))
 
   const [showAbout, setShowAbout] = useState(false)
@@ -33,7 +44,7 @@ function App() {
   const [downloadProgress, setDownloadProgress] = useState(100)
 
   useEffect(() => {
-    console.log(openLoginForm)
+    console.log("user ==" +auth.user)
     downloadModel('inpaint', setDownloadProgress)
   }, [])
 
@@ -47,12 +58,12 @@ function App() {
   }
 
   const setOpenLoginForm1=() => {
-    console.log("HHHHHHHHHHHHHHHHHHH")
-    setOpenLoginForm(!openLoginForm)
+    setOpenLoginForm(!openLoginForm)  
   }
   return (
     <div className="min-h-full flex flex-col">
       
+     
       <HeaderComponent file={file} setFile={setFile} setOpenLoginForm1={setOpenLoginForm1}/>
 
 
@@ -118,7 +129,8 @@ function App() {
 
 
     <FeedbackButton/>
-    {openLoginForm && <LoginComponent/>}
+    {openLoginForm && !auth.authenticated && <LoginComponent/>}
+    
 
     </div>
   )

@@ -9,20 +9,32 @@ import { ArchiveIcon } from '@heroicons/react/outline'
 import DropdownComponent from './DropdownComponent'
 import LoginComponent from '../../auth/LoginComponent'
 import FeedbackButton from '../footer/FeedbackButton'
+import useAuth from '../../auth/AuthContext'
 
 interface HeaderProps {
     file: File | undefined;
     setFile: (file: File | undefined) => void;
     setOpenLoginForm1:(isOpen: boolean) => void;}
-
+ 
 const HeaderComponent = ({ file, setFile,setOpenLoginForm1 }: HeaderProps) => {
+    const auth=useAuth()
     const [loginMenuActive, setLoginMenuActive] = useState(false)
     const [isLogin, setIsLogin] = useState(false)
  
+    const handleLogout=()=>{
+        auth.logout()
+    }
+    const handleProfileToggle= ()=>{
+     
+        if (auth.authenticated) {
+           setLoginMenuActive(!loginMenuActive)
+        }
+       else setOpenLoginForm1(true)
+    }
     return (
         <div>
 
-            <header className="z-10 shadow flex flex-row items-center justify-between h-14">
+            <header className=" shadow flex flex-row items-center justify-between h-14">
                 <Button
                     className={[
                         file ? '' : 'opacity-40 pointer-events-none',
@@ -56,7 +68,7 @@ const HeaderComponent = ({ file, setFile,setOpenLoginForm1 }: HeaderProps) => {
                     <Button
                         className=""
                         icon={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" className="w-8  h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>}
-                        onClick={() => setOpenLoginForm1(true)}
+                        onClick={() => handleProfileToggle()}
                     >
                         
                     </Button>
@@ -77,7 +89,8 @@ const HeaderComponent = ({ file, setFile,setOpenLoginForm1 }: HeaderProps) => {
                 </div>
 
             </header>
-            {loginMenuActive && (isLogin ? <DropdownComponent /> : null)}
+            {loginMenuActive && <DropdownComponent handleLogout={handleLogout} />}
+
         </div>
 
     )
