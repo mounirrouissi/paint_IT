@@ -15,6 +15,7 @@ const request = (options) => {
     return fetch(options.url, options)
     .then(response => 
         response.json().then(json => {
+            console.log(json); // Log the entire JSON response
             if(!response.ok) {
                 return Promise.reject(json);
             }

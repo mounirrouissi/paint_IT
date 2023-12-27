@@ -38,7 +38,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
      await login(loginRequest)
      .then(response => {
       localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-      setUser({email: loginRequest.email,name:'',imageUrl:''});
+      setUser({email: response.user.email,name:response.user.name,imageUrl:''});
      setAuthenticated(true);
      setLoading(false);
   });
@@ -51,8 +51,6 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
  const signupUser = async (signupRequest: any) => {
    try {
      await signup(signupRequest);
-     const currentUser = await getCurrentUser();
-     setUser(currentUser);
    } catch (error) {
      console.error(error);
    }
