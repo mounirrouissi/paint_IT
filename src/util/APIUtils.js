@@ -16,6 +16,7 @@ const request = (options) => {
     .then(response => 
         response.json().then(json => {
             console.log(json); // Log the entire JSON response
+            alert(json.message);
             if(!response.ok) {
                 return Promise.reject(json);
             }
@@ -48,5 +49,13 @@ export function signup(signupRequest) {
         url: API_BASE_URL + "/auth/signup",
         method: 'POST',
         body: JSON.stringify(signupRequest)
+    });
+}
+
+export function feedback(feedbackRequest) {
+    return request({
+        url: API_BASE_URL + "/api/feedback",
+        method: 'POST',
+        body: JSON.stringify(feedbackRequest)
     });
 }

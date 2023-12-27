@@ -9,6 +9,7 @@ import OAuth2RedirectHandler from './components/auth/oauth2/OAuth2RedirectHandle
 loadingOnnxruntime()
 
 ReactDOM.render(
+    
     <AuthProvider>
     <BrowserRouter>
     <Routes>

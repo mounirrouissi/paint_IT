@@ -4,6 +4,8 @@ import { useClickAway } from 'react-use';
 import { GOOGLE_AUTH_URL } from '../../constants';
 import { Link, redirect, useNavigate } from 'react-router-dom'
 import useAuth from './AuthContext';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 
 
@@ -27,14 +29,17 @@ const SignupForm: React.FC<SignupFormProps> = ({ handleSignupClick }) => {
         });
     }
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        auth.signupUser(form);
+        await auth.signupUser(form);
+       
         handleSignupClick();
+        
+
     }
 
     return (
-        
+        <>
             <form className="space-y-4" onSubmit={handleSubmit}>
                 <label className="block text-sm font-medium text-gray-700">
                     Name:
@@ -48,13 +53,14 @@ const SignupForm: React.FC<SignupFormProps> = ({ handleSignupClick }) => {
                     Password:
                     <input type="password" name="password" value={form.password} onChange={handleInputChange} required className='mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'/>
                 </label>
-                <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" >Sign Up</button>
+                <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer" >Sign Up</button>
                 <div className="text-right">
-                            <a className="text-sm text-indigo-600 hover:text-indigo-500 " onClick={handleSignupClick}>
+                            <a className="text-sm text-indigo-600 hover:text-indigo-500 cursor-pointer " onClick={handleSignupClick}>
                                 Sign In
                             </a>
                         </div>
             </form>
+            </>
         
     );
 }
@@ -143,12 +149,12 @@ const LoginForm: React.FC = () => {
                             />
                         </div>
                         <div>
-                            <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <button type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer">
                                 Sign in
                             </button>
                         </div>
                         <div className="text-right">
-                            <a className="text-sm text-indigo-600 hover:text-indigo-500 " onClick={handleSignupClick}>
+                            <a className="text-sm text-indigo-600 hover:text-indigo-500 cursor-pointer" onClick={handleSignupClick}>
                                 Sign up
                             </a>
                         </div>
@@ -205,6 +211,7 @@ function LoginComponent() {
 
     return (
         <>
+  
             {showAbout && (
                 <Modal>
                   <div ref={loginRef} className="text-xl space-y-5  bg-white p-6 rounded-lg shadow-lg">

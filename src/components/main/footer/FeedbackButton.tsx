@@ -5,15 +5,35 @@ import Modal from '../../Modal';
 import * as m from '../../../paraglide/messages';
 import { languageTag, setLanguageTag } from '../../../paraglide/runtime';
 import Button from '../../Button';
+import useAuth from '../../auth/AuthContext';
 
 function FeedbackButton() {
   const [showAbout, setShowAbout] = useState(false);
   const modalRef = useRef(null);
-
+const auth=useAuth()
   useClickAway(modalRef, () => {
     setShowAbout(false);
   });
+  const [feedback, setFeedback] = useState({
+    type: 'like',
+    details: '',
+    accept: false,
+  });
 
+
+  const handleChange = (e) => {
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    setFeedback({
+      ...feedback,
+      [e.target.name]: value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    auth.feedbackUser(feedback)
+    // Handle form submission here
+  };
   return (
     <>
     
@@ -29,32 +49,34 @@ function FeedbackButton() {
       {showAbout && (
         <Modal>
           <div ref={modalRef} className="text-xl space-y-5 bg-white p-6 rounded-lg shadow-lg">
-            <p>
-              {' '}
-              任何问题到:{' '}
-              <a
-                href="https://github.com/lxfater/inpaint-web"
-                className="text-blue-500 underline"
-                rel="noreferrer"
-                target="_blank"
-              >
-                Inpaint-web
-              </a>{' '}
-              反馈
-            </p>
-            <p>
-              {' '}
-              For any questions, please go to:{' '}
-              <a
-                href="https://github.com/lxfater/inpaint-web"
-                className="text-blue-500 underline"
-                rel="noreferrer"
-                target="_blank"
-              >
-                Inpaint-web
-              </a>{' '}
-              to provide feedback.
-            </p>
+          <form onSubmit={handleSubmit} className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+              <div className="flex space-x-4 mb-4">
+                <label className="flex items-center">
+                  <input type="radio" name="type" value="like" checked={feedback.type === 'like'} onChange={handleChange} />
+                  <span className="ml-2">Like</span>
+                </label>
+                <label className="flex items-center">
+                  <input type="radio" name="type" value="dislike" checked={feedback.type === 'dislike'} onChange={handleChange} />
+                  <span className="ml-2">Dislike</span>
+                </label>
+                <label className="flex items-center">
+                  <input type="radio" name="type" value="suggest" checked={feedback.type === 'suggest'} onChange={handleChange} />
+                  <span className="ml-2">Suggest</span>
+                </label>
+              </div>
+              <label className='font-bold mb-2 block'>Enter Feedback(*Required)</label>
+              <textarea name="details" onChange={handleChange} className="w-full p-2 mb-4 border rounded" required/>
+            {/*   <div className="mb-4 flex items-center">
+                <input type="checkbox" name="accept" checked={feedback.accept} onChange={handleChange} />
+                <label className="ml-2">
+                  I accept the terms and conditions
+                </label>
+              </div> */}
+              <div className="flex justify-end space-x-4">
+                <button type="submit" className="bg-blue-500 text-white rounded px-4 py-2">Send</button>
+                <button type="button" onClick={() => setShowAbout(false)} className="bg-gray-300 text-black rounded px-4 py-2 ">Close</button>
+              </div>
+            </form>
           </div>
         </Modal>
       )}

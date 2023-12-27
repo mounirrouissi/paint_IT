@@ -27,6 +27,8 @@ import {
 import OAuth2RedirectHandler from './components/auth/oauth2/OAuth2RedirectHandler'
 import useAuth, { AuthContext } from './components/auth/AuthContext'
 import DropdownComponent from './components/main/header/DropdownComponent'
+import { ToastContainer } from 'react-toastify';
+
 
 function App() {
   const [file, setFile] = useState<File>()
@@ -61,12 +63,13 @@ function App() {
     setOpenLoginForm(!openLoginForm)  
   }
   return (
+   
     <div className="min-h-full flex flex-col">
-      
-     
+ 
+
       <HeaderComponent file={file} setFile={setFile} setOpenLoginForm1={setOpenLoginForm1}/>
 
-
+    
       <main
         style={{
           height: 'calc(100vh - 56px)',
@@ -131,8 +134,8 @@ function App() {
     <FeedbackButton/>
     {openLoginForm && !auth.authenticated && <LoginComponent/>}
     
-
     </div>
+   
   )
 }
 

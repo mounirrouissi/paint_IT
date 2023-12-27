@@ -1,6 +1,7 @@
 import React, { FC, createContext, useContext, useEffect, useState } from 'react';
-import { getCurrentUser, login, signup } from './../../util/APIUtils';
+import { feedback, getCurrentUser, login, signup } from './../../util/APIUtils';
 import { ACCESS_TOKEN } from '../../constants';
+import { toast } from 'react-toastify';
 
 export interface User {
  email: string;
@@ -33,24 +34,36 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
   })
   } 
 
- const loginUser = async (loginRequest:  { email:string, password:string }) => {
-   try {
-     await login(loginRequest)
-     .then(response => {
-      localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-      setUser({email: response.user.email,name:response.user.name,imageUrl:''});
-     setAuthenticated(true);
-     setLoading(false);
-  });
-}
-  catch (error) {
-     console.error(error);
-   }
- };
+
+  const loginUser = async (loginRequest:  { email:string, password:string }) => {
+     try {
+       await login(loginRequest)
+       .then(response => {
+        localStorage.setItem(ACCESS_TOKEN, response.accessToken);
+        setUser({email: response.user.email,name:response.user.name,imageUrl:''});
+        setAuthenticated(true);
+        setLoading(false);
+       });
+     }
+     catch (error) {
+       console.error(error);
+       toast.error('Login failed');
+     }
+  };
 
  const signupUser = async (signupRequest: any) => {
    try {
-     await signup(signupRequest);
+     await signup(signupRequest)
+     .then(response => {})
+     ;
+   } catch (error) {
+     console.error(error);
+   }
+ };
+ 
+ const feedbackUser = async (feedbackRequest: any) => {
+   try {
+     await feedback(feedbackRequest);
    } catch (error) {
      console.error(error);
    }
@@ -64,7 +77,7 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
  };
 
  return (
-   <AuthContext.Provider value={{ user,loadCurrentlyLoggedInUser, loginUser, signupUser, logout,loading,authenticated }}>
+   <AuthContext.Provider value={{ user,loadCurrentlyLoggedInUser, loginUser, signupUser, logout,loading,authenticated,feedbackUser }}>
      {children}
    </AuthContext.Provider>
  );
