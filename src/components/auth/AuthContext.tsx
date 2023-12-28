@@ -54,7 +54,9 @@ export const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
  const signupUser = async (signupRequest: any) => {
    try {
      await signup(signupRequest)
-     .then(response => {})
+     .then(response => {
+      alert("Sign up successful")
+     })
      ;
    } catch (error) {
      console.error(error);

@@ -509,7 +509,7 @@ export default function Editor(props: EditorProps) {
       ].join(' ')}
     >
      
-    <div className=" grid grid-rows-4 lg:grid-cols-5  h-4/5 lg:h-full justify-between  bg-red-500" >
+    <div className=" grid grid-rows-8 lg:grid-cols-5  h-4/5 lg:h-full justify-between  bg-red-500" >
       
      
        {/* canva */}
@@ -517,7 +517,7 @@ export default function Editor(props: EditorProps) {
          <div
            className={[
             'Canva',
-            'lg:order-2  row-span-3 col-span-4 flex lg:flex-row justify-center ',
+            'lg:order-2  row-span-6 col-span-4 flex lg:flex-row justify-center ',
             'mt-1',
             'bg-yellow-500',
            ].join(' ')}
@@ -623,21 +623,44 @@ export default function Editor(props: EditorProps) {
 
        {/* History */}
       
-       <div
-         ref={historyListRef}
-          style={{
-    
-  }}
-         className={[
-          'History  lg:order-1 mr-2',
-          'mt-4 border p-2 rounded',
-          'row-span-1 h-fit col-span-4  lg:col-span-1 lg:row-span-3   items-center    gap-3 flex lg:flex-col justify-between lg:justify-start lg:w-fit lg:p-2 ',
-          ' sm:space-y-0  ml-2',
-          'scrollbar-thin scrollbar-thumb-slate-400  overflow-y-scroll  overflow-x-scroll',
-         ].join(' ')}
+       <div className="row-span-1 h-fit lg:h-full col-span-4 lg:col-span-1 lg:row-span-6 items-center gap-3 flex lg:flex-col justify-start">
+         <div
+           ref={historyListRef}
+           style={{ position: 'relative' }}
+           className={[
+             'History lg:order-1 mr-2 flex-grow-0',
+             'mt-4 border p-2 rounded',
+             ' w-full lg:p-2',
+             'space-y-0 ml-2',
+             'scrollbar-thin scrollbar-thumb-slate-400 overflow-y-scroll overflow-x-scroll',
+           ].join(' ')}
+         >
+           {History}
+           <button
+         
+         style={{
+           position: 'absolute',
+           bottom: '10px',
+           right: '0',
+           backgroundColor: 'red', // Change this to the color you want
+           border: 'none',
+           borderRadius: '50%',
+           width: '50px',
+           height: '50px',
+           display: 'flex',
+           alignItems: 'center',
+           justifyContent: 'center',
+         }}
        >
-         {History}
+         {/* Replace this with your SVG icon */}
+         <svg height="24" width="24">
+           <circle cx="12" cy="12" r="10" stroke="black" stroke-width="1" fill="white" />
+         </svg>
+       </button>
+         </div>
+         
        </div>
+
     </div>
 
       {!downloaded && (
@@ -663,10 +686,10 @@ export default function Editor(props: EditorProps) {
       {/* Bottom sheet*/}
       <div
         className={[
-          'bottom_sheet   fixed bottom-2  lg:bottom-5  mx-10 my-2  flex-shrink-0',
+          'bottom_sheet   fixed bottom-2  lg:bottom-5  mx-10 lg:my-2  flex-shrink-0',
           'bg-white rounded-md border border-gray-300 hover:border-gray-400 shadow-md hover:shadow-lg p-2 transition duration-200 ease-in-out',
-          'flex items-center w-full self-center max-w-4xl py-6 mb-4, justify-between',
-          'space-y-2 sm:space-y-0 sm:flex-row sm:space-x-5',
+          'flex items-center w-full self-center  max-w-4xl lg:py-6 mb-4, justify-between',
+          'lg:space-y-2  sm:flex-row sm:space-x-5', 
         ].join(' ')}
       >
         {renders.length > 0 && (

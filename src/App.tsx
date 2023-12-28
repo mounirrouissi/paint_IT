@@ -21,13 +21,18 @@ import HeaderComponent from './components/main/header/HeaderComponent'
 import LoginComponent from './components/auth/LoginComponent'
 import {
   BrowserRouter,
+  Navigate,
   Route,
   Routes
 } from 'react-router-dom';
+
+import { PurchaseRequest } from './types/types';
 import OAuth2RedirectHandler from './components/auth/oauth2/OAuth2RedirectHandler'
 import useAuth, { AuthContext } from './components/auth/AuthContext'
 import DropdownComponent from './components/main/header/DropdownComponent'
 import { ToastContainer } from 'react-toastify';
+import PlayGround from './PlayGround'
+import { purchase } from './util/APIUtils'
 
 
 function App() {
@@ -46,6 +51,7 @@ function App() {
   const [downloadProgress, setDownloadProgress] = useState(100)
 
   useEffect(() => {
+    auth.loadCurrentlyLoggedInUser()
     console.log("user ==" +auth.user)
     downloadModel('inpaint', setDownloadProgress)
   }, [])
@@ -62,78 +68,70 @@ function App() {
   const setOpenLoginForm1=() => {
     setOpenLoginForm(!openLoginForm)  
   }
+  async function handlePurchase(index: number): Promise<void> {
+    if (!auth.authenticated) {
+       alert('Please login first');
+    } else {
+       const purchaseRequest: PurchaseRequest = {index: index, customerEmail: auth.user.email, customerName: auth.user.name};
+       try {
+           const response = await purchase(purchaseRequest);
+          
+               if (response.status === 'success') {
+                   // Redirect the user to the Stripe checkout page
+                   window.location.href = response.url;
+               } else {
+                   console.error('Purchase failed:', response.message);
+               }
+       } catch (error) {
+           console.error('Error during purchase:', error);
+       }
+    }
+   }
+   
+ 
   return (
    
-    <div className="min-h-full flex flex-col">
+    <div className="min-h-full flex flex-col ">
  
 
       <HeaderComponent file={file} setFile={setFile} setOpenLoginForm1={setOpenLoginForm1}/>
 
     
-      <main
-        style={{
-          height: 'calc(100vh - 56px)',
-        }}
-        className=" relative"
-      >
-        {file ? (
-          <Editor file={file} />
-        ) : (
-          <>
-            <div className="flex h-full flex-1 flex-col items-center justify-center overflow-hidden">
-              <div className="h-72 sm:w-1/2 max-w-5xl">
-                <FileSelect
-                  onSelection={async f => {
-                    const { file: resizedFile } = await resizeImageFile(
-                      f,
-                      1024 * 4
-                    )
-                    setFile(resizedFile)
-                  }}
-                />
-              </div>
-              <div className="flex flex-col sm:flex-row pt-10 items-center justify-center cursor-pointer">
-                <span className="text-gray-500">{m.try_it_images()}</span>
-                <div className="flex space-x-2 sm:space-x-4 px-4">
-                  {['dog', 'car', 'bird'].map(
-                    image => (
-                      <div
-                        key={image}
-                        onClick={() => startWithDemoImage(image)}
-                        role="button"
-                        onKeyDown={() => startWithDemoImage(image)}
-                        tabIndex={-1}
-                      >
-                        <img
-                          className="rounded-md hover:opacity-75 w-auto h-25"
-                          src={`examples/${image}.jpeg`}
-                          alt={image}
-                          style={{ height: '100px' }}
-                        />
-                      </div>
-                    )
-                  )}
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-      </main>
+      <PlayGround file={file} setFile={setFile} downloadProgress={downloadProgress} startWithDemoImage={startWithDemoImage} />
 
-     
-      {!(downloadProgress === 100) && (
-        <Modal>
-          <div className="text-xl space-y-5">
-            <p>{m.inpaint_model_download_message()}</p>
-            <Progress percent={downloadProgress} />
-          </div>
-        </Modal>
-      )}
 
 
     <FeedbackButton/>
     {openLoginForm && !auth.authenticated && <LoginComponent/>}
     
+
+    <div id='Pricing' className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <h1 className="text-4xl font-bold mb-10">Pricing</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {['UI Design', 'PRO monthly','PRO Yearly'].map((title, index) => (
+          <div key={index} className={`bg-white rounded-lg shadow-md p-6 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-80 ${index === 2 ? 'border-4 border-green-500' : ''}`}>
+            <div className="flex justify-center items-center mb-4">
+              <span className={`material-icons text-4xl ${index === 0 ? 'text-gray-500' : index === 1 ? 'text-blue-500' : 'text-green-500'}`}>
+                {index === 0 ? 'Public Version'  : index === 1 ? 'Most Used' : 'Best Offer'}
+              </span>
+            </div>
+            <h1 className={`text-2xl font-bold mb-4 text-center ${index === 1 ? 'underline' : ''} ${index === 2 ? 'underline text-green-500' : ''}`}>{title}</h1>
+            <hr className="mb-4"/>
+            <p className="text-gray-600 mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente harum voluptatum, sit cum voluptatibus inventore quae qui provident eveniet dicta at, quibusdam ipsam iusto reprehenderit hic saepe nesciunt sed illo.</p>
+            <hr className="mb-4"/>
+            <div className="flex justify-between items-center">
+              <div className="text-2xl font-bold">
+                <span>{index === 0 ? 'FREE FOREVER' : index === 1 ? '5' : '30' }</span>
+                {index !== 0 && <b className="text-sm">$</b>}
+              </div>
+              {(index === 1 || index === 2) && <a href="#" className="px-4 py-2 bg-yellow-400  text-white rounded hover:bg-yellow-600 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110" onClick={()=>handlePurchase(index)}>Purchase now</a>}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+
     </div>
    
   )

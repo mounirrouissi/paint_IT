@@ -14,22 +14,23 @@ import useAuth from '../../auth/AuthContext'
 interface HeaderProps {
     file: File | undefined;
     setFile: (file: File | undefined) => void;
-    setOpenLoginForm1:(isOpen: boolean) => void;}
- 
-const HeaderComponent = ({ file, setFile,setOpenLoginForm1 }: HeaderProps) => {
-    const auth=useAuth()
+    setOpenLoginForm1: (isOpen: boolean) => void;
+}
+
+const HeaderComponent = ({ file, setFile, setOpenLoginForm1 }: HeaderProps) => {
+    const auth = useAuth()
     const [loginMenuActive, setLoginMenuActive] = useState(false)
     const [isLogin, setIsLogin] = useState(false)
- 
-    const handleLogout=()=>{
+
+    const handleLogout = () => {
         auth.logout()
     }
-    const handleProfileToggle= ()=>{
-     
+    const handleProfileToggle = () => {
+
         if (auth.authenticated) {
-           setLoginMenuActive(!loginMenuActive)
+            setLoginMenuActive(!loginMenuActive)
         }
-       else setOpenLoginForm1(true)
+        else setOpenLoginForm1(true)
     }
     return (
         <div>
@@ -60,32 +61,31 @@ const HeaderComponent = ({ file, setFile,setOpenLoginForm1 }: HeaderProps) => {
                 <div className="flex justify-end  w-[300px]  sm:mx-5">
                     <Button
                         className=""
-                        children={
-                            <p className='hidden md:block'>Archive</p>
-                        }
+                        onClick={() => {
+                            window.location.href = "#Pricing";
+                        }}
                     >
+                        Pricing
                     </Button>
+                    <div className="hidden  md:block">
+                        <Button
+                            className=""
+                            children={
+                                <p className='  '>Archive</p>
+                            }
+                        >
+                        </Button>
+                    </div>
                     <Button
                         className=""
                         icon={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" className="w-8  h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>}
                         onClick={() => handleProfileToggle()}
                     >
-                        
+
                     </Button>
 
 
-                    {/*      <Button
-           className='hidden md:block'
-               onClick={() => {
-                   if (languageTag() === 'zh') {
-                       setLanguageTag('en')
-                   } else {
-                       setLanguageTag('zh')
-                   }
-               }}
-           >
-               <p>{languageTag() === 'en' ? 'to chinese' : 'en'}</p>
-           </Button> */}
+
                 </div>
 
             </header>
