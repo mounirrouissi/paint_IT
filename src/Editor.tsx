@@ -504,12 +504,12 @@ export default function Editor(props: EditorProps) {
   return (
     <div
       className={[
-        'flex flex-col  justify-between h-full mx-4 md:mx-0',
+        'flex flex-col w-full h-3/5 lg:h-4/5   justify-between bg-green-500 ',
         isInpaintingLoading ? 'animate-pulse-fast pointer-events-none' : '',
       ].join(' ')}
     >
      
-    <div className=" grid grid-rows-8 lg:grid-cols-5  h-4/5 lg:h-full justify-between  bg-red-500" >
+    <div className="grid  sm:grid-rows-4  h-full lg:grid-cols-5 justify-center  bg-red-500"  >
       
      
        {/* canva */}
@@ -517,7 +517,7 @@ export default function Editor(props: EditorProps) {
          <div
            className={[
             'Canva',
-            'lg:order-2  row-span-6 col-span-4 flex lg:flex-row justify-center ',
+            'row-span-3  lg:order-2   lg:col-span-4 lg:row-span-3 flex justify-center ',
             'mt-1',
             'bg-yellow-500',
            ].join(' ')}
@@ -609,7 +609,7 @@ export default function Editor(props: EditorProps) {
                  }}
                />
              </div>
-             {isInpaintingLoading && (
+             {/* {isInpaintingLoading && (
                <div className="z-10 bg-white absolute bg-opacity-80 top-0 left-0 right-0 bottom-0  h-full w-full flex justify-center items-center">
                  <div ref={modalRef} className="text-xl space-y-5 w-4/5 sm:w-1/2">
                    <p>正在处理中，请耐心等待。。。</p>
@@ -617,26 +617,29 @@ export default function Editor(props: EditorProps) {
                    <Progress percent={generateProgress} />
                  </div>
                </div>
-             )}
+             )} */}
            </div>
          </div>
 
        {/* History */}
       
-       <div className="row-span-1 h-fit lg:h-full col-span-4 lg:col-span-1 lg:row-span-6 items-center gap-3 flex lg:flex-col justify-start">
+       <div className="lg:row-span-3   lg:h-full flex-grow-0 lg:w-fit   lg:col-span-1    ">
          <div
            ref={historyListRef}
            style={{ position: 'relative' }}
            className={[
-             'History lg:order-1 mr-2 flex-grow-0',
-             'mt-4 border p-2 rounded',
-             ' w-full lg:p-2',
-             'space-y-0 ml-2',
-             'scrollbar-thin scrollbar-thumb-slate-400 overflow-y-scroll overflow-x-scroll',
+            'History lg:order-1 mr-2 sm:mb-2',
+            'lg:mt-4 mt-1 border lg:p-2 rounded',
+            'lg:w-full h-full   lg:p-2',
+            'space-y-0 ml-2',
+            'scrollbar-thin scrollbar-thumb-slate-400 overflow-y-scroll overflow-x-scroll',
+            'flex sm:flex-col gap-5 ' // Add these classes
            ].join(' ')}
          >
            {History}
-           <button
+
+           {/* archive photoes button */}
+        {/*    <button
          
          style={{
            position: 'absolute',
@@ -652,18 +655,12 @@ export default function Editor(props: EditorProps) {
            justifyContent: 'center',
          }}
        >
-         {/* Replace this with your SVG icon */}
+        
          <svg height="24" width="24">
            <circle cx="12" cy="12" r="10" stroke="black" stroke-width="1" fill="white" />
          </svg>
-       </button>
-         </div>
-         
-       </div>
-
-    </div>
-
-      {!downloaded && (
+         </button> */}
+             {!downloaded && (
         <Modal>
           <div className="text-xl space-y-5">
             <p>{m.upscaleing_model_download_message()}</p>
@@ -681,15 +678,23 @@ export default function Editor(props: EditorProps) {
           }}
           ref={brushRef}
         />
-      )}
+      )} </div>
+         
+       
+       
+       </div>
+  
+    </div>
+
+  
       
       {/* Bottom sheet*/}
       <div
         className={[
-          'bottom_sheet   fixed bottom-2  lg:bottom-5  mx-10 lg:my-2  flex-shrink-0',
-          'bg-white rounded-md border border-gray-300 hover:border-gray-400 shadow-md hover:shadow-lg p-2 transition duration-200 ease-in-out',
+          'bottom_sheet   fixed  bottom-1  flex-shrink-0',
+          'bg-transparent  rounded-md border border-gray-300 hover:border-gray-400 shadow-md hover:shadow-lg p-2 transition duration-200 ease-in-out',
           'flex items-center w-full self-center  max-w-4xl lg:py-6 mb-4, justify-between',
-          'lg:space-y-2  sm:flex-row sm:space-x-5', 
+          'lg:space-y-2 sm:mx sm:flex-row sm:space-x-5', 
         ].join(' ')}
       >
         {renders.length > 0 && (
@@ -755,19 +760,19 @@ export default function Editor(props: EditorProps) {
             onStart={handleSliderStart}
           />
         )}
-
+{/* 
 <Button
-        
+          className='flex flex-col '
         title="See original"
           primary={isZoomActive}
           icon={<ZoomInIcon className="w-10 h-7 self-center  " />}
           onClick={()=>handleZoomClick()} 
         >
-           {/* <span className="text-xs">{m.original()}</span>  */}
-        </Button>
+           {<span className="text-xs">{m.original()}</span>  }
+        </Button> */}
 
         <Button
-        className='flex flex-col' 
+        className='flex flex-col ' 
         title="See original"
           primary={showOriginal}
           icon={<EyeIcon className="w-10 h-7 self-center  " />}
