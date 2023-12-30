@@ -33,11 +33,14 @@ import DropdownComponent from './components/main/header/DropdownComponent'
 import { ToastContainer } from 'react-toastify';
 import PlayGround from './PlayGround'
 import { purchase } from './util/APIUtils'
+import { PlayGroundLayout } from './PlayGroundLayout'
 
 
 function App() {
   const [file, setFile] = useState<File>()
   const [openLoginForm, setOpenLoginForm] = useState(false)
+  const [showAbout, setShowAbout] = useState(false);
+  const [isBottom, setIsBottom] = useState(false);
   const [stateLanguageTag, setStateLanguageTag] = useState<'en' | 'zh'>('en')
   const auth = useAuth()
 
@@ -45,7 +48,6 @@ function App() {
   
   onSetLanguageTag(() => setStateLanguageTag(languageTag()))
 
-  const [showAbout, setShowAbout] = useState(false)
   const modalRef = useRef(null)
 
   const [downloadProgress, setDownloadProgress] = useState(100)
@@ -55,6 +57,19 @@ function App() {
     console.log("user ==" +auth.user)
     downloadModel('inpaint', setDownloadProgress)
   }, [])
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Check if user has scrolled more than 50px
+      const isScrolled = window.scrollY > 50;
+      setIsBottom(isScrolled);
+    };
+  
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   useClickAway(modalRef, () => {
     setShowAbout(false)
@@ -87,35 +102,36 @@ function App() {
        }
     }
    }
-   
+
  
+ console.log("APP.tsx img="+file)
   return (
    
     <div className="min-h-full flex flex-col ">
  
 
-      <HeaderComponent file={file} setFile={setFile} setOpenLoginForm1={setOpenLoginForm1}/>
+      <HeaderComponent file={file} setFile={setFile} setOpenLoginForm1={setOpenLoginForm1} setShowAbout={() => setShowAbout(!showAbout)}/>
 
     
       <PlayGround file={file} setFile={setFile} downloadProgress={downloadProgress} startWithDemoImage={startWithDemoImage} />
 
 
 
-    <FeedbackButton/>
+   { !file &&  <FeedbackButton showAbout={showAbout} setShowAbout={setShowAbout}/>}
     {openLoginForm && !auth.authenticated && <LoginComponent/>}
     
 
-{ auth.authenticated &&    <div id='Pricing' className="flex flex-col items-center justify-center min-h-screen mt-7  bg-gray-100">
+{  !file?.name  && !showAbout && <div id='Pricing'  className="flex flex-col items-center justify-center min-h-screen mt-7  bg-gray-100">
       <h1 className="text-4xl font-bold mb-10">Pricing</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
         {['UI Design', 'PRO monthly','PRO Yearly'].map((title, index) => (
-          <div key={index} className={`bg-white rounded-lg shadow-md p-6 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-80 ${index === 2 ? 'border-4 border-green-500' : ''}`}>
+          <div key={index} className={`bg-white rounded-lg shadow-md p-6 transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-80 ${index === 1 ? 'border-4 border-second ' : index === 2 ? 'border-4 border-blue-600 ' : ''}`}>
             <div className="flex justify-center items-center mb-4">
-              <span className={`material-icons text-4xl ${index === 0 ? 'text-gray-500' : index === 1 ? 'text-blue-500' : 'text-green-500'}`}>
+              <span className={`material-icons text-4xl text-gray-500 ${index === 0 ? 'text-2xl' : index === 1 ? 'text-4xl' : 'text-5xl'}`}>
                 {index === 0 ? 'Public Version'  : index === 1 ? 'Most Used' : 'Best Offer'}
               </span>
             </div>
-            <h1 className={`text-2xl font-bold mb-4 text-center ${index === 1 ? 'underline' : ''} ${index === 2 ? 'underline text-green-500' : ''}`}>{title}</h1>
+            <h1 className={`text-2xl font-bold mb-4 text-center ${index === 1 ? 'underline' : ''} ${index === 2 ? 'underline text-blue-500' : ''}`}>{title}</h1>
             <hr className="mb-4"/>
             <p className="text-gray-600 mb-4">Lorem ipsum dolor   sit amet, consectetur adipisicing elit. Sapiente harum voluptatum, sit cum voluptatibus inventore quae qui provident eveniet dicta at, quibusdam ipsam iusto reprehenderit hic saepe nesciunt sed illo.</p>
             <hr className="mb-4"/>

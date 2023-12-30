@@ -5,15 +5,11 @@ import Editor from './Editor';
 import Modal from './components/Modal';
 import Progress from './components/Progress';
 import * as m from './paraglide/messages';
+import { EditorProps, PlayGroundProps } from './types/types';
 
-interface EditorProps {
-  file: File | undefined;
-  setFile: (file: File | undefined) => void;
-  downloadProgress: number;
-  startWithDemoImage: (img: string) => Promise<void>;
-}
 
-const PlayGround: React.FC<EditorProps> = ({ file, setFile, downloadProgress, startWithDemoImage }) => {
+const PlayGround: React.FC<PlayGroundProps> = ({ file, setFile, downloadProgress, startWithDemoImage }) => {
+
   return (
     <>
     
@@ -24,7 +20,7 @@ const PlayGround: React.FC<EditorProps> = ({ file, setFile, downloadProgress, st
       className=" relative"
     >
       {file ? (
-        <Editor file={file} />
+        <Editor file={file}/>
       ) : (
         <>
           <div className="flex h-full flex-1 flex-col items-center justify-center overflow-hidden">

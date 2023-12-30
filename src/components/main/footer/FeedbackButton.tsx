@@ -7,8 +7,8 @@ import { languageTag, setLanguageTag } from '../../../paraglide/runtime';
 import Button from '../../Button';
 import useAuth from '../../auth/AuthContext';
 
-function FeedbackButton() {
-  const [showAbout, setShowAbout] = useState(false);
+function FeedbackButton({showAbout,setShowAbout}:{showAbout:Boolean,setShowAbout: (showAbout:Boolean) => void} ) {
+  
   const modalRef = useRef(null);
 const auth=useAuth()
   useClickAway(modalRef, () => {
@@ -38,17 +38,17 @@ const auth=useAuth()
     <>
     
       <Button
-        className="hidden md:block z-50 fixed bottom-4 right-4 w-15 h-12 rounded-full flex-col justify-center bg-blue-500 text-white shadow-lg   transform hover:scale-105 hover:text-black transition-transform duration-200"
+        className=" z-50 fixed bottom-4 right-4 lg:w-15 lg:h-12  rounded-full flex-col justify-center bg-blue-500 text-white shadow-lg   transform hover:scale-105 hover:text-black transition-transform duration-200"
         icon={<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true" className="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>}
         onClick={() => {
-          setShowAbout(true);
+          setShowAbout(!showAbout);
         }}
       >
         <span className=""></span> 
       </Button>
       {showAbout && (
         <Modal>
-          <div ref={modalRef} className="text-xl space-y-5 bg-white p-6 rounded-lg shadow-lg">
+          <div ref={modalRef} className="text-xl h-full flex items-center space-y-5 bg-white p-6 rounded-lg shadow-lg">
           <form onSubmit={handleSubmit} className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
               <div className="flex space-x-4 mb-4">
                 <label className="flex items-center">

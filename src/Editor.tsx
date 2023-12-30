@@ -13,10 +13,9 @@ import Progress from './components/Progress'
 import { modelExists, downloadModel } from './adapters/cache'
 import Modal from './components/Modal'
 import * as m from './paraglide/messages'
+import { EditorProps } from './types/types'
 
-interface EditorProps {
-  file: File
-}
+
 
 interface Line {
   size?: number
@@ -500,16 +499,17 @@ export default function Editor(props: EditorProps) {
     setZoomActive(!isZoomActive)
     setZoomLevel(prev => prev + 0.1);
   }
+  console.log("Editor.tsx img="+file?.name)
 
   return (
     <div
       className={[
-        'flex flex-col w-full h-3/5 lg:h-4/5   justify-between bg-green-500 ',
+        'flex flex-col h-4/5    justify-between bg-green-500 overflow-y-hidden ',
         isInpaintingLoading ? 'animate-pulse-fast pointer-events-none' : '',
       ].join(' ')}
     >
      
-    <div className="grid  sm:grid-rows-4  h-full lg:grid-cols-5 justify-center  bg-red-500"  >
+    <div className="grid w-full sm:w-screen  sm:grid-rows-4  h-screen   lg:grid-cols-5 lg:justify-center  bg-red-500 overflow-hidden"   >
       
      
        {/* canva */}
@@ -517,7 +517,7 @@ export default function Editor(props: EditorProps) {
          <div
            className={[
             'Canva',
-            'row-span-3  lg:order-2   lg:col-span-4 lg:row-span-3 flex justify-center ',
+            'row-span-3  sm:w-screen lg:order-2 lg:col-span-4 lg:row-span-3 flex items-center justify-center lg:justify-normal lg:ml-40 ',
             'mt-1',
             'bg-yellow-500',
            ].join(' ')}
@@ -623,17 +623,17 @@ export default function Editor(props: EditorProps) {
 
        {/* History */}
       
-       <div className="lg:row-span-3   lg:h-full flex-grow-0 lg:w-fit   lg:col-span-1    ">
+       <div className="row-span-2 lg:row-span-3 w-full h-full  lg:h-full   lg:col-span-1    ">
          <div
            ref={historyListRef}
            style={{ position: 'relative' }}
            className={[
-            'History lg:order-1 mr-2 sm:mb-2',
+            'History lg:order-1 mr-2 ',
             'lg:mt-4 mt-1 border lg:p-2 rounded',
             'lg:w-full h-full   lg:p-2',
             'space-y-0 ml-2',
             'scrollbar-thin scrollbar-thumb-slate-400 overflow-y-scroll overflow-x-scroll',
-            'flex sm:flex-col gap-5 ' // Add these classes
+            'flex sm:flex-col items-center w-full gap-8' // Add these classes
            ].join(' ')}
          >
            {History}
@@ -691,10 +691,10 @@ export default function Editor(props: EditorProps) {
       {/* Bottom sheet*/}
       <div
         className={[
-          'bottom_sheet   fixed  bottom-1  flex-shrink-0',
-          'bg-transparent  rounded-md border border-gray-300 hover:border-gray-400 shadow-md hover:shadow-lg p-2 transition duration-200 ease-in-out',
-          'flex items-center w-full self-center  max-w-4xl lg:py-6 mb-4, justify-between',
-          'lg:space-y-2 sm:mx sm:flex-row sm:space-x-5', 
+          'bottom_sheet   fixed  bottom-1  ',
+          'bg-transparent  rounded-md border border-gray-300 hover:border-gray-400 shadow-md hover:shadow-lg p-0 lg:p-2  transition duration-200 ease-in-out',
+          'flex items-center w-full self-center  max-w-4xl lg:py-6 mb-2  lg:mb-4 justify-between',
+          'lg:space-y-2  sm:flex-row sm:space-x-5', 
         ].join(' ')}
       >
         {renders.length > 0 && (
@@ -772,7 +772,7 @@ export default function Editor(props: EditorProps) {
         </Button> */}
 
         <Button
-        className='flex flex-col ' 
+        className='flex  items-center ' 
         title="See original"
           primary={showOriginal}
           icon={<EyeIcon className="w-10 h-7 self-center  " />}
@@ -781,14 +781,24 @@ export default function Editor(props: EditorProps) {
             setTimeout(() => setSeparatorLeft(0), 300)
           }}
         >
-           {/* <span className="text-xs">{m.original()}</span>  */}
+           <span className="hidden md:block text-lg">{m.original()}</span> 
         </Button>
         {!showOriginal && (
-          <Button onUp={onSuperResolution}>{m.upscale()}</Button>
+         <Button 
+         className='flex  items-center '
+         onUp={onSuperResolution}
+         icon={
+           <svg xmlns="http://www.w3.org/2000/svg" fill="none" className="h-6 w-6" viewBox="0 0 24 24" stroke="currentColor">
+             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+           </svg>
+         }
+       >
+         <span className="hidden md:block text-lg">{m.upscale()}</span>
+       </Button>
         )}
 
         {isSmallScreen() ? (
-          <div className="fixed top-10 right-4 p-2 ">
+          <div className="fixed top-10 right-0 p-2 ">
             <Button
             className='bg-transparent'
               primary
