@@ -38,7 +38,8 @@ const HeaderComponent = ({ file, setFile, setOpenLoginForm1,setShowAbout }: Head
     return (
         <div>
 
-            <header className=" shadow flex flex-row items-center justify-between h-14">
+<header className="backdrop-blur-md shadow-lg flex flex-row items-center justify-between h-14 p-4 rounded-lg bg-gray-200 text-gray-800">
+                {file &&
                 <Button
                     className={[
                         file ? '' : 'opacity-40 pointer-events-none',
@@ -54,16 +55,16 @@ const HeaderComponent = ({ file, setFile, setOpenLoginForm1,setShowAbout }: Head
                             {m.start_new()}
                         </span>
                     </div>
-                </Button>
+                </Button>}
 
-                <div className="hidden md:block text-4xl font-bold text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out">
-                    Paint IT
-                </div>
+               {!file && <div className=" md:block text-4xl sm:flex sm:float-start font-bold text-blue-600 hover:text-blue-700 transition duration-300 ease-in-out">
+                    Clearify
+                </div>}
 
                 {/* Login +Archive icons */}
                 <div className="flex justify-end  w-[300px]  sm:mx-5">
                     
-                   { !file?.name  && <Button
+                   {/* { !file?.name  && <Button
                         className="hidden   md:block"
                         onClick={() => {
                             window.location.href = "#Pricing";
@@ -72,7 +73,7 @@ const HeaderComponent = ({ file, setFile, setOpenLoginForm1,setShowAbout }: Head
                         <span>Pricing</span>
 
 
-                    </Button>}
+                    </Button>} */}
                     {/* <div className="hidden  md:block">
                         <Button
                             className=""
