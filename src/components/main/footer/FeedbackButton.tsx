@@ -21,7 +21,7 @@ const auth=useAuth()
   });
 
 
-  const handleChange = (e) => {
+  const handleChange = (e: { target: { type: string; checked: any; value: any; name: any; }; }) => {
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     setFeedback({
       ...feedback,
@@ -29,7 +29,7 @@ const auth=useAuth()
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     auth.feedbackUser(feedback)
     // Handle form submission here
@@ -65,7 +65,7 @@ const auth=useAuth()
                 </label>
               </div>
               <label className='font-bold mb-2 block'>Enter Feedback(*Required)</label>
-              <textarea name="details" onChange={handleChange} className="w-full p-2 mb-4 border rounded" required/>
+              <textarea name="details" onChange={()=>{handleChange}} className="w-full p-2 mb-4 border rounded" required/>
             {/*   <div className="mb-4 flex items-center">
                 <input type="checkbox" name="accept" checked={feedback.accept} onChange={handleChange} />
                 <label className="ml-2">

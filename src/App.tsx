@@ -33,7 +33,6 @@ import DropdownComponent from './components/main/header/DropdownComponent'
 import { ToastContainer } from 'react-toastify';
 import PlayGround from './PlayGround'
 import { purchase } from './util/APIUtils'
-import { PlayGroundLayout } from './PlayGroundLayout'
 
 
 function App() {

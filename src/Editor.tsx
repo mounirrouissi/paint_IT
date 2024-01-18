@@ -48,8 +48,8 @@ const BRUSH_HIDE_ON_SLIDER_CHANGE_TIMEOUT = 2000
 export default function Editor(props: EditorProps) {
   const { file } = props
   const [brushSize, setBrushSize] = useState(40)
-  const [original, isOriginalLoaded] = useImage(file)
-  const [renders, setRenders] = useState<HTMLImageElement[]>([])
+  const [original, isOriginalLoaded] = useImage(file ?? new Blob())
+ const [renders, setRenders] = useState<HTMLImageElement[]>([])
   const [showSlider, setShowSlider] = useState(false)
   const [isZoomActive, setZoomActive] = useState(false)
   const [zoomLevel, setZoomLevel] = useState(1);
@@ -470,8 +470,11 @@ export default function Editor(props: EditorProps) {
       const start = Date.now()
       console.log('superResolution_start')
       // each time based on the last result, the first is the original
-      const newFile = renders.at(-1) ?? file
-      const res = await superResolution(newFile, setGenerateProgress)
+      const newFile = renders.at(-1) ?? file;
+      if (!newFile) {
+        throw new Error('No file to process for super resolution.');
+      }
+      const res = await superResolution(newFile, setGenerateProgress);
       if (!res) {
         throw new Error('empty response')
       }

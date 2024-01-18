@@ -181,7 +181,7 @@ function processImage(
       if (canvasId) {
         cv.imshow(canvasId, src_rgb)
       }
-      resolve(imgProcess(src_rgb))
+      resolve(new Uint8Array(imgProcess(src_rgb).buffer));
 
       src.delete()
       src_rgb.delete()
