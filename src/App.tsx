@@ -116,9 +116,9 @@ function App() {
       <PlayGround file={file} setFile={setFile} downloadProgress={downloadProgress} startWithDemoImage={startWithDemoImage} />
 
 
-
+{/* 
    { !file &&  <FeedbackButton showAbout={showAbout} setShowAbout={setShowAbout}/>}
-    {openLoginForm && !auth.authenticated && <LoginComponent/>}
+    {openLoginForm && !auth.authenticated && <LoginComponent/>} */}
     
 {/* 
 {  !file?.name  && !showAbout && <div id='Pricing'  className="flex flex-col items-center justify-center min-h-screen mt-7  bg-gray-100">
