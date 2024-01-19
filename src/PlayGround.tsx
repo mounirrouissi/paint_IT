@@ -24,7 +24,7 @@ const PlayGround: React.FC<PlayGroundProps> = ({ file, setFile, downloadProgress
       ) : (
         <>
           <div className="flex h-full flex-1 flex-col items-center justify-center overflow-hidden">
-            <div className="h-72 sm:w-1/2 max-w-5xl">
+            <div className="h-72 w-full max-w-4xl">
               <FileSelect
                 onSelection={async f => {
                   const { file: resizedFile } = await resizeImageFile(

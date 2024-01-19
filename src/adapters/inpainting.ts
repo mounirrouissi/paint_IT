@@ -193,7 +193,7 @@ const resizeMark = (
     resizedImage.src = resizedImageUrl
   })
 }
-let model: ArrayBuffer | null = null
+let model: ort.InferenceSession | null = null;
 export default async function inpaint(
   imageFile: File | HTMLImageElement,
   maskBase64: string
