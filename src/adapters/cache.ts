@@ -36,7 +36,7 @@ function getModel(modelType: modelType) {
   if (modelType === 'superResolution') {
     const modelList = [
       {
-        name: 'realesrgan-x4',
+        name: 'super-resolution-10',
         // url: 'https://huggingface.co/lxfater/inpaint-web/resolve/main/realesrgan-x4.onnx',
         url: 'https://huggingface.co/MonirR/sub_pixel_cnn/resolve/main/super-resolution-10.onnx',
         backupUrl:
