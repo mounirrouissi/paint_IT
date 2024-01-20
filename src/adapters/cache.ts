@@ -37,7 +37,8 @@ function getModel(modelType: modelType) {
     const modelList = [
       {
         name: 'realesrgan-x4',
-        url: 'https://huggingface.co/lxfater/inpaint-web/resolve/main/realesrgan-x4.onnx',
+        // url: 'https://huggingface.co/lxfater/inpaint-web/resolve/main/realesrgan-x4.onnx',
+        url: 'https://huggingface.co/MonirR/sub_pixel_cnn/resolve/main/super-resolution-10.onnx',
         backupUrl:
           'https://modelscope.cn/api/v1/models/lxfater/inpaint-web/repo?Revision=master&FilePath=realesrgan-x4.onnx',
       },
