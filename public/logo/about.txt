@@ -1,0 +1,6 @@
+This favicon was generated using the following font:
+
+- Font Title: Angkor
+- Font Author: Copyright 2020 The Angkor Project Authors (https://github.com/danhhong/Angkor)
+- Font Source: http://fonts.gstatic.com/s/angkor/v32/H4cmBXyAlsPdnlb-8iw-4Lqggw.ttf
+- Font License: SIL Open Font License, 1.1 (http://scripts.sil.org/OFL))
