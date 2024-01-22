@@ -14,8 +14,7 @@ import { modelExists, downloadModel } from './adapters/cache'
 import Modal from './components/Modal'
 import * as m from './paraglide/messages'
 import { EditorProps } from './types/types'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShuttleSpace } from '@fortawesome/free-solid-svg-icons';
+
 
 
 interface Line {
@@ -613,15 +612,15 @@ export default function Editor(props: EditorProps) {
                  }}
                />
              </div>
-             {isInpaintingLoading &&( <div className="z-10 bg-white absolute bg-opacity-80 top-0 left-0 right-0 bottom-0  h-full w-full flex justify-center items-center">
+             {/* {isInpaintingLoading && (
+               <div className="z-10 bg-white absolute bg-opacity-80 top-0 left-0 right-0 bottom-0  h-full w-full flex justify-center items-center">
                  <div ref={modalRef} className="text-xl space-y-5 w-4/5 sm:w-1/2">
-                   {/* <p>正在处理中，请耐心等待。。。</p> */}
-                   
-                   <p>It is being processed, please wait...</p><FontAwesomeIcon icon={faShuttleSpace} beatFade className="w-8 h-8" />
+                   <p>正在处理中，请耐心等待。。。</p>
+                   <p>It is being processed, please be patient...</p>
                    <Progress percent={generateProgress} />
                  </div>
                </div>
-             )} 
+             )} */}
            </div>
          </div>
 
