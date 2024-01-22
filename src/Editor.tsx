@@ -14,9 +14,9 @@ import { modelExists, downloadModel } from './adapters/cache'
 import Modal from './components/Modal'
 import * as m from './paraglide/messages'
 import { EditorProps } from './types/types'
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShuttleSpace } from '@fortawesome/free-solid-svg-icons';
-
 
 interface Line {
   size?: number
@@ -46,6 +46,7 @@ function drawLines(
 }
 
 const BRUSH_HIDE_ON_SLIDER_CHANGE_TIMEOUT = 2000
+
 export default function Editor(props: EditorProps) {
   const { file } = props
   const [brushSize, setBrushSize] = useState(40)
@@ -77,6 +78,8 @@ export default function Editor(props: EditorProps) {
   const canvasDiv = useRef<HTMLDivElement>(null)
   const [downloaded, setDownloaded] = useState(true)
   const [downloadProgress, setDownloadProgress] = useState(0)
+  const [upscaleNumber, setUpscaleNumber] = useState(1)
+
   const windowSize = useWindowSize()
 
   const draw = useCallback(
@@ -141,6 +144,7 @@ export default function Editor(props: EditorProps) {
 
   // Draw once the original image is loaded
   useEffect(() => {
+
     if (!context?.canvas) {
       return
     }
@@ -405,8 +409,6 @@ export default function Editor(props: EditorProps) {
                   textAlign: 'center',
                 }}
               >
-                回到这
-                <br />
                 Back here
               </div>
             </Button>
@@ -460,6 +462,7 @@ export default function Editor(props: EditorProps) {
   }, [])
 
   const onSuperResolution = useCallback(async () => {
+    setUpscaleNumber(2)
     if (!(await modelExists('superResolution'))) {
       setDownloaded(false)
       await downloadModel('superResolution', setDownloadProgress)
@@ -613,7 +616,7 @@ export default function Editor(props: EditorProps) {
                  }}
                />
              </div>
-             {isInpaintingLoading &&( <div className="z-10 bg-white absolute bg-opacity-80 top-0 left-0 right-0 bottom-0  h-full w-full flex justify-center items-center">
+           {  isInpaintingLoading &&( <div className="z-10 bg-white absolute bg-opacity-80 top-0 left-0 right-0 bottom-0  h-full w-full flex justify-center items-center">
                  <div ref={modalRef} className="text-xl space-y-5 w-4/5 sm:w-1/2">
                    {/* <p>正在处理中，请耐心等待。。。</p> */}
                    
@@ -621,7 +624,7 @@ export default function Editor(props: EditorProps) {
                    <Progress percent={generateProgress} />
                  </div>
                </div>
-             )} 
+             )}
            </div>
          </div>
 
@@ -789,8 +792,9 @@ export default function Editor(props: EditorProps) {
         </Button>
         {!showOriginal && (
          <Button 
-         className='flex  items-center '
-         onUp={onSuperResolution}
+         className={`flex  items-center ${upscaleNumber !=1? 'opacity-50 cursor-not-allowed ':''}  disabled:${upscaleNumber >1}` }
+
+         onUp={upscaleNumber === 1 ? onSuperResolution : undefined}
          icon={
            <svg xmlns="http://www.w3.org/2000/svg" fill="none" className="h-6 w-6" viewBox="0 0 24 24" stroke="currentColor">
              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
