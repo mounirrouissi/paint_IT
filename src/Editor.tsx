@@ -17,6 +17,7 @@ import { EditorProps } from './types/types'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShuttleSpace } from '@fortawesome/free-solid-svg-icons';
+import { removeBackground } from './adapters/removeBg'
 
 interface Line {
   size?: number
@@ -461,7 +462,113 @@ export default function Editor(props: EditorProps) {
     }
   }, [])
 
-  const onSuperResolution = useCallback(async () => {
+
+  function imageToBlob(image: HTMLImageElement | File | undefined): Promise<Blob> {
+    return new Promise((resolve, reject) => {
+      if (!image) {
+        reject(new Error('Image is undefined'));
+        return;
+      }
+  
+      const canvas = document.createElement('canvas');
+      let ctx: CanvasRenderingContext2D | null;
+  
+      if (image instanceof HTMLImageElement) {
+        canvas.width = image.naturalWidth;
+        canvas.height = image.naturalHeight;
+        ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject(new Error('Could not get canvas context'));
+          return;
+        }
+        ctx.drawImage(image, 0, 0);
+        canvas.toBlob(blob => {
+          if (blob) {
+            resolve(blob);
+          } else {
+            reject(new Error('Could not convert image to Blob'));
+          }
+        }, 'image/png');
+      } else if (image instanceof File) {
+        // Create an object URL for the file
+        const objectURL = URL.createObjectURL(image);
+        const img = new Image();
+        img.onload = () => {
+          // Once the image is loaded, get its dimensions
+          canvas.width = img.naturalWidth;
+          canvas.height = img.naturalHeight;
+          ctx = canvas.getContext('2d');
+          if (!ctx) {
+            reject(new Error('Could not get canvas context'));
+            URL.revokeObjectURL(objectURL); // Clean up the object URL
+            return;
+          }
+          // Draw the image onto the canvas
+          ctx.drawImage(img, 0, 0);
+          canvas.toBlob(blob => {
+            if (blob) {
+              resolve(blob);
+            } else {
+              reject(new Error('Could not convert image to Blob'));
+            }
+            URL.revokeObjectURL(objectURL); // Clean up the object URL
+          }, 'image/png');
+        };
+        img.onerror = () => {
+          reject(new Error('Could not load image from File'));
+          URL.revokeObjectURL(objectURL); // Clean up the object URL
+        };
+        // Set the src of the image to the object URL to start loading
+        img.src = objectURL;
+      } else {
+        reject(new Error('Invalid image type'));
+      }
+    });
+  }
+
+ const removeBG = async () => {
+  console.log("removing background");
+  const newFile = renders.at(-1) ?? file;
+  const formData = new FormData();
+  const newBlobFile = await imageToBlob(newFile);
+  formData.append('image', newBlobFile);
+
+  const response = await fetch('http://127.0.0.1:8000/api/process_image', {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+
+  const start = Date.now()
+
+  // Create a new HTMLImageElement and set its src to the object URL
+  const newRender = new Image();
+ 
+
+  const imageStr = await response.text(); // Get the base64 string from the response
+
+  // downloadImage(`data:image/png;base64,${imageStr}`, 'IMG');
+  const src = `data:image/png;base64,${imageStr}`;
+ 
+  newRender.dataset.id = Date.now().toString()
+  await loadImage(newRender, src)
+  renders.push(newRender)
+  lines.push({ pts: [], src: '' } as Line)
+  setRenders([...renders])
+  setLines([...lines])
+  console.log('superResolution_processed', {
+    duration: Date.now() - start,
+  })
+   
+};
+
+  
+
+const onSuperResolution = useCallback(async () => {
     setUpscaleNumber(2)
     if (!(await modelExists('superResolution'))) {
       setDownloaded(false)
@@ -494,7 +601,6 @@ export default function Editor(props: EditorProps) {
         duration: Date.now() - start,
       })
 
-      // 替换当前图片
     } catch (error) {
       console.error('superResolution', error)
     } finally {
@@ -825,6 +931,13 @@ export default function Editor(props: EditorProps) {
             <span className='hidden md:block'>{m.download()}</span>
           </Button>
         )}
+         <Button
+            primary
+            icon={<DownloadIcon className="w-6 h-6" />}
+            onClick={removeBG}
+          >
+            <span className='hidden md:block'>remove BG</span>
+          </Button>
 
       </div>
     </div>
