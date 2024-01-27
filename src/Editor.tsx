@@ -533,10 +533,10 @@ export default function Editor(props: EditorProps) {
   const newBlobFile = await imageToBlob(newFile);
   formData.append('image', newBlobFile);
 
-  const response = await fetch('http://127.0.0.1:8000/api/process_image', {
-    method: 'POST',
-    body: formData,
-  });
+  const response = await fetch('http://167.86.98.136:8000/api/process_image', {
+  method: 'POST',
+  body: formData,
+});
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
