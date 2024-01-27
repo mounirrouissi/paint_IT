@@ -10,6 +10,14 @@ export async function checkWebgpu() {
   }
   return true
 }
+
+declare global {
+  interface Navigator {
+    gpu?: any;
+  }
+ }
+
+ 
 export const wasm = () =>
   typeof WebAssembly === 'object' &&
   typeof WebAssembly.instantiate === 'function'

@@ -3,6 +3,7 @@
 import cv, { Mat } from 'opencv-ts'
 import { getCapabilities } from './util'
 import { ensureModel } from './cache'
+import * as ort from 'onnxruntime-web'
 
 function loadImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -112,9 +113,14 @@ async function tileProc(
           const yt = yp + tilePadding
           // const idx = (i * tileSize + x) + (j * tileSize + y) * imageW;
           // 主要转化到一维的坐标上，
-          tileData[xt + yt * tileSize + tileROffset] = data[idx + rOffset]
+          tileData[xt + yt * tileSize + tileROffset] = Number(data[idx + rOffset]);
+          tileData[xt + yt * tileSize + tileGOffset] = Number(data[idx + gOffset]);
+          tileData[xt + yt * tileSize + tileBOffset] = Number(data[idx + bOffset]);
+          
+
+          /* tileData[xt + yt * tileSize + tileROffset] = data[idx + rOffset]
           tileData[xt + yt * tileSize + tileGOffset] = data[idx + gOffset]
-          tileData[xt + yt * tileSize + tileBOffset] = data[idx + bOffset]
+          tileData[xt + yt * tileSize + tileBOffset] = data[idx + bOffset] */
         }
       }
 
@@ -147,12 +153,14 @@ async function tileProc(
           const idx = xim + yim * outImageW
           const xt = x + tilePadding * 4
           const yt = y + tilePadding * 4
-          outputTensor.data[idx + outROffset] =
-            results.output.data[xt + yt * outTileSize + outTileROffset]
-          outputTensor.data[idx + outGOffset] =
+          outputTensor.data[idx + outROffset] = Number(results.output.data[xt + yt * outTileSize + outTileROffset]);
+          outputTensor.data[idx + outGOffset] = Number(results.output.data[xt + yt * outTileSize + outTileGOffset]);
+          outputTensor.data[idx + outBOffset] = Number(results.output.data[xt + yt * outTileSize + outTileBOffset]);
+            
+          /* outputTensor.data[idx + outGOffset] =
             results.output.data[xt + yt * outTileSize + outTileGOffset]
           outputTensor.data[idx + outBOffset] =
-            results.output.data[xt + yt * outTileSize + outTileBOffset]
+            results.output.data[xt + yt * outTileSize + outTileBOffset] */
         }
       }
       currentTile++
@@ -181,7 +189,7 @@ function processImage(
       if (canvasId) {
         cv.imshow(canvasId, src_rgb)
       }
-      resolve(imgProcess(src_rgb))
+      resolve(new Uint8Array(imgProcess(src_rgb).buffer));
 
       src.delete()
       src_rgb.delete()
@@ -243,12 +251,16 @@ function imageDataToDataURL(imageData: ImageData) {
 
   // 绘制 imageData 到 canvas
   const ctx = canvas.getContext('2d')
-  ctx.putImageData(imageData, 0, 0)
+  if (ctx !== null) {
+    ctx.putImageData(imageData, 0, 0);
+   } else {
+    throw new Error("Could not get 2D rendering context");
+   }
 
   // 导出为数据 URL
   return canvas.toDataURL()
 }
-let model: ArrayBuffer | null = null
+let model: ort.InferenceSession | null = null
 export default async function superResolution(
   imageFile: File | HTMLImageElement,
   callback: (progress: number) => void
