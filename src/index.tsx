@@ -9,7 +9,6 @@ import CheckoutPage from './components/payment/SubscriptionPlan'
 import SubscriptionPlan from './components/payment/SubscriptionPlan'
 import Success from './components/payment/Success'
 import Failure from './components/payment/Failure'
-import { PlayGroundLayout } from './PlayGroundLayout'
 import Editor from './Editor'
 
 loadingOnnxruntime()
@@ -23,7 +22,7 @@ ReactDOM.render(
     <Route path="/" element={<App />} />
     
     <Route path="/checkout" element={<SubscriptionPlan />} />
-    <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler location= {{search:""}}/>} />
+    <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
     {/* Stripe pages       */}
     <Route path="/success" element={<Success />} />
     <Route path="/failure" element={<Failure />} />

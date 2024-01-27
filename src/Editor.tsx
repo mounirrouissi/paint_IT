@@ -911,27 +911,7 @@ const onSuperResolution = useCallback(async () => {
        </Button>
         )}
 
-        {isSmallScreen() ? (
-          <div className="fixed top-10 right-0 p-2 ">
-            <Button
-            className='bg-transparent'
-              primary
-              icon={<DownloadIcon className="w-6 h-6" />}
-              onClick={download}
-            >
-              <span className='hidden md:block'>{m.download()}</span>
-            </Button>
-          </div>
-        ) : (
-          <Button
-            primary
-            icon={<DownloadIcon className="w-6 h-6" />}
-            onClick={download}
-          >
-            <span className='hidden md:block'>{m.download()}</span>
-          </Button>
-        )}
-      {!showOriginal && (
+{!showOriginal && (
          <Button 
          className='bg-transparent'
          primary
@@ -958,6 +938,29 @@ const onSuperResolution = useCallback(async () => {
    <span className='hidden md:block'>remove BG</span>
           </Button>
           )}
+
+
+        {isSmallScreen() ? (
+          <div className="fixed top-10 right-0 p-2 ">
+            <Button
+            className='bg-transparent'
+              primary
+              icon={<DownloadIcon className="w-6 h-6" />}
+              onClick={download}
+            >
+              <span className='hidden md:block'>{m.download()}</span>
+            </Button>
+          </div>
+        ) : (
+          <Button
+            primary
+            icon={<DownloadIcon className="w-6 h-6" />}
+            onClick={download}
+          >
+            <span className='hidden md:block'>{m.download()}</span>
+          </Button>
+        )}
+     
    
 
      
