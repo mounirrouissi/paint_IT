@@ -194,8 +194,6 @@ const resizeMark = (
   })
 }
 let model: ArrayBuffer | null = null
-
-
 export default async function inpaint(
   imageFile: File | HTMLImageElement,
   maskBase64: string

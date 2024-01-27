@@ -1,6 +1,6 @@
 import localforage from 'localforage'
- 
-export type modelType = 'inpaint' | 'superResolution' | 'removeBG'
+
+export type modelType = 'inpaint' | 'superResolution'
 
 localforage.config({
   name: 'modelCache',
@@ -40,18 +40,6 @@ function getModel(modelType: modelType) {
         url: 'https://huggingface.co/lxfater/inpaint-web/resolve/main/realesrgan-x4.onnx',
         backupUrl:
           'https://modelscope.cn/api/v1/models/lxfater/inpaint-web/repo?Revision=master&FilePath=realesrgan-x4.onnx',
-      },
-    ]
-    const currentModel = modelList[0]
-    return currentModel
-  }
-  if (modelType === 'removeBG') {
-    const modelList = [
-      {
-        name: 'realesrgan-x4',
-        url: 'https://huggingface.co/chwshuang/Stable_diffusion_remove_background_model/resolve/main/u2net_cloth_seg.onnx',
-        backupUrl:
-          'https://huggingface.co/chwshuang/Stable_diffusion_remove_background_model/resolve/main/u2net_cloth_seg.onnx',
       },
     ]
     const currentModel = modelList[0]
