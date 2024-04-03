@@ -1,33 +1,51 @@
-# React + TypeScript + Vite
+# React/Spring Boot Bookstore Application
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
+This application is a full-stack web solution for a bookstore. It features a React frontend, Spring Boot backend, and includes advanced functionalities such as image processing, OAuth2 Google authentication, email-based login/signup, user feedback, and Stripe payment integration.
 
-Currently, two official plugins are available:
+## Features
+- **Image Processing**: Remove objects from images and upscale images by 4x.
+- **OAuth2 Google Authentication**: Secure login using Google accounts.
+- **Email Login/Signup**: Users can also register and sign in using their email addresses.
+- **User Feedback**: Collect and manage user feedback.
+- **Stripe Payment Integration**: Process payments with Stripe for a seamless checkout experience.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Getting Started
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-## Expanding the ESLint configuration
+### Prerequisites
+- JDK 1.8 or later
+- Maven 3.2+
+- Node.js 10+
+- Angular CLI
+- PostgreSQL
+- AWS Account
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Installing
+A step by step series of examples that tell you how to get a development environment running.
 
-- Configure the top-level `parserOptions` property like this:
+#### Backend Setup
+```bash
+# Clone the repository
+git clone [your-repo-link]
+# Navigate to the server directory
+cd server
+# Build the project
+mvn clean install
+# Run the application
+mvn spring-boot:run
+Frontend Setup
+# Navigate to the client directory
+cd client
+# Install dependencies
+npm install
+# Run the application
+ng serve --open
+Deployment
+Add additional notes about how to deploy this on a live system, including any additional configuration steps for AWS.
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
-
-
-
+Built With
+React - The web framework used
+Spring Boot - Backend framework
+Maven - Dependency Management
+Stripe - Payment gateway
