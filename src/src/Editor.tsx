@@ -15,9 +15,7 @@ import Modal from './components/Modal'
 import * as m from './paraglide/messages'
 import { EditorProps } from './types/types'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShuttleSpace } from '@fortawesome/free-solid-svg-icons';
-import { removeBackground } from './adapters/removeBg'
+
 
 interface Line {
   size?: number
@@ -47,7 +45,6 @@ function drawLines(
 }
 
 const BRUSH_HIDE_ON_SLIDER_CHANGE_TIMEOUT = 2000
-
 export default function Editor(props: EditorProps) {
   const { file } = props
   const [brushSize, setBrushSize] = useState(40)
@@ -79,8 +76,6 @@ export default function Editor(props: EditorProps) {
   const canvasDiv = useRef<HTMLDivElement>(null)
   const [downloaded, setDownloaded] = useState(true)
   const [downloadProgress, setDownloadProgress] = useState(0)
-  const [upscaleNumber, setUpscaleNumber] = useState(1)
-
   const windowSize = useWindowSize()
 
   const draw = useCallback(
@@ -145,7 +140,6 @@ export default function Editor(props: EditorProps) {
 
   // Draw once the original image is loaded
   useEffect(() => {
-
     if (!context?.canvas) {
       return
     }
@@ -409,9 +403,9 @@ export default function Editor(props: EditorProps) {
                   fontSize: '12px',
                   textAlign: 'center',
                 }}
-         
+              >
+                回到这
                 <br />
-
                 Back here
               </div>
             </Button>
@@ -464,114 +458,7 @@ export default function Editor(props: EditorProps) {
     }
   }, [])
 
-
-  function imageToBlob(image: HTMLImageElement | File | undefined): Promise<Blob> {
-    return new Promise((resolve, reject) => {
-      if (!image) {
-        reject(new Error('Image is undefined'));
-        return;
-      }
-  
-      const canvas = document.createElement('canvas');
-      let ctx: CanvasRenderingContext2D | null;
-  
-      if (image instanceof HTMLImageElement) {
-        canvas.width = image.naturalWidth;
-        canvas.height = image.naturalHeight;
-        ctx = canvas.getContext('2d');
-        if (!ctx) {
-          reject(new Error('Could not get canvas context'));
-          return;
-        }
-        ctx.drawImage(image, 0, 0);
-        canvas.toBlob(blob => {
-          if (blob) {
-            resolve(blob);
-          } else {
-            reject(new Error('Could not convert image to Blob'));
-          }
-        }, 'image/png');
-      } else if (image instanceof File) {
-        // Create an object URL for the file
-        const objectURL = URL.createObjectURL(image);
-        const img = new Image();
-        img.onload = () => {
-          // Once the image is loaded, get its dimensions
-          canvas.width = img.naturalWidth;
-          canvas.height = img.naturalHeight;
-          ctx = canvas.getContext('2d');
-          if (!ctx) {
-            reject(new Error('Could not get canvas context'));
-            URL.revokeObjectURL(objectURL); // Clean up the object URL
-            return;
-          }
-          // Draw the image onto the canvas
-          ctx.drawImage(img, 0, 0);
-          canvas.toBlob(blob => {
-            if (blob) {
-              resolve(blob);
-            } else {
-              reject(new Error('Could not convert image to Blob'));
-            }
-            URL.revokeObjectURL(objectURL); // Clean up the object URL
-          }, 'image/png');
-        };
-        img.onerror = () => {
-          reject(new Error('Could not load image from File'));
-          URL.revokeObjectURL(objectURL); // Clean up the object URL
-        };
-        // Set the src of the image to the object URL to start loading
-        img.src = objectURL;
-      } else {
-        reject(new Error('Invalid image type'));
-      }
-    });
-  }
-
- const removeBG = async () => {
-  console.log("removing background");
-  const newFile = renders.at(-1) ?? file;
-  const formData = new FormData();
-  const newBlobFile = await imageToBlob(newFile);
-  formData.append('image', newBlobFile);
-
-  const response = await fetch('http://167.86.98.136:8000/api/process_image', {
-  method: 'POST',
-  body: formData,
-});
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-
-  const start = Date.now()
-
-  // Create a new HTMLImageElement and set its src to the object URL
-  const newRender = new Image();
- 
-
-  const imageStr = await response.text(); // Get the base64 string from the response
-
-  // downloadImage(`data:image/png;base64,${imageStr}`, 'IMG');
-  const src = `data:image/png;base64,${imageStr}`;
- 
-  newRender.dataset.id = Date.now().toString()
-  await loadImage(newRender, src)
-  renders.push(newRender)
-  lines.push({ pts: [], src: '' } as Line)
-  setRenders([...renders])
-  setLines([...lines])
-  console.log('superResolution_processed', {
-    duration: Date.now() - start,
-  })
-   
-};
-
-  
-
-const onSuperResolution = useCallback(async () => {
-    setUpscaleNumber(2)
+  const onSuperResolution = useCallback(async () => {
     if (!(await modelExists('superResolution'))) {
       setDownloaded(false)
       await downloadModel('superResolution', setDownloadProgress)
@@ -603,6 +490,7 @@ const onSuperResolution = useCallback(async () => {
         duration: Date.now() - start,
       })
 
+      // 替换当前图片
     } catch (error) {
       console.error('superResolution', error)
     } finally {
@@ -619,16 +507,12 @@ const onSuperResolution = useCallback(async () => {
   return (
     <div
       className={[
-
-        'flex flex-col h-4/5    justify-between  overflow-y-hidden ',
-
+        'flex flex-col h-4/5    justify-between overflow-y-hidden ',
         isInpaintingLoading ? 'animate-pulse-fast pointer-events-none' : '',
       ].join(' ')}
     >
      
-
-    <div className="grid w-full sm:w-screen  sm:grid-rows-4  h-screen   lg:grid-cols-5 lg:justify-center  overflow-hidden"   >
-
+    <div className="grid w-full sm:w-screen  sm:grid-rows-4  h-screen   lg:grid-cols-5 lg:justify-center   overflow-hidden"   >
       
      
        {/* canva */}
@@ -638,8 +522,7 @@ const onSuperResolution = useCallback(async () => {
             'Canva',
             'row-span-3  sm:w-screen lg:order-2 lg:col-span-4 lg:row-span-3 flex items-center justify-center lg:justify-normal lg:ml-40 ',
             'mt-1',
-
-
+            '',
            ].join(' ')}
            style={{
          
@@ -729,15 +612,15 @@ const onSuperResolution = useCallback(async () => {
                  }}
                />
              </div>
-           {  isInpaintingLoading &&( <div className="z-10 bg-white absolute bg-opacity-80 top-0 left-0 right-0 bottom-0  h-full w-full flex justify-center items-center">
+             {/* {isInpaintingLoading && (
+               <div className="z-10 bg-white absolute bg-opacity-80 top-0 left-0 right-0 bottom-0  h-full w-full flex justify-center items-center">
                  <div ref={modalRef} className="text-xl space-y-5 w-4/5 sm:w-1/2">
-                   {/* <p>正在处理中，请耐心等待。。。</p> */}
-                   
-                   <p>It is being processed, please wait...</p><FontAwesomeIcon icon={faShuttleSpace} beatFade className="w-8 h-8" />
+                   <p>正在处理中，请耐心等待。。。</p>
+                   <p>It is being processed, please be patient...</p>
                    <Progress percent={generateProgress} />
                  </div>
                </div>
-             )}
+             )} */}
            </div>
          </div>
 
@@ -905,9 +788,8 @@ const onSuperResolution = useCallback(async () => {
         </Button>
         {!showOriginal && (
          <Button 
-         className={`flex  items-center ${upscaleNumber !=1? 'opacity-50 cursor-not-allowed ':''}  disabled:${upscaleNumber >1}` }
-
-         onUp={upscaleNumber === 1 ? onSuperResolution : undefined}
+         className='flex  items-center '
+         onUp={onSuperResolution}
          icon={
            <svg xmlns="http://www.w3.org/2000/svg" fill="none" className="h-6 w-6" viewBox="0 0 24 24" stroke="currentColor">
              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -917,35 +799,6 @@ const onSuperResolution = useCallback(async () => {
          <span className="hidden md:block text-lg">{m.upscale()}</span>
        </Button>
         )}
-
-{!showOriginal && (
-         <Button 
-         className='bg-transparent'
-         primary
-         icon={
-           <svg
-             xmlns="http://www.w3.org/2000/svg"
-             className="h-6 w-6"
-             fill="none"
-             viewBox="0 0 24 24"
-             stroke="currentColor"
-             strokeWidth={2}
-           >
-             <path
-               strokeLinecap="round"
-               strokeLinejoin="round"
-               d="M17.25 6.75l-1.5 1.5-2.5-2.5 1.5-1.5a2.121 2.121 0 013 3zm-3 3l-9 9H3v-2.25l9-9 2.25 2.25zm3 0l2.25-2.25 2.5 2.5H18v1.5l-2.25 2.25L13.5 12z"
-             />
-           </svg>
-         }
-         onClick={removeBG}
-       >
-    
-
-   <span className='hidden md:block'>remove BG</span>
-          </Button>
-          )}
-
 
         {isSmallScreen() ? (
           <div className="fixed top-10 right-0 p-2 ">
@@ -967,10 +820,6 @@ const onSuperResolution = useCallback(async () => {
             <span className='hidden md:block'>{m.download()}</span>
           </Button>
         )}
-     
-   
-
-     
 
       </div>
     </div>

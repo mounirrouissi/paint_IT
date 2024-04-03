@@ -132,9 +132,6 @@ function App() {
             </div>
             <h1 className={`text-2xl font-bold mb-4 text-center ${index === 1 ? 'underline' : ''} ${index === 2 ? 'underline text-blue-500' : ''}`}>{title}</h1>
             <hr className="mb-4"/>
-            <p className="text-gray-600 mb-4">
-              Lorem ipsum dolor   sit amet, consectetur adipisicing elit. Sapiente harum voluptatum, sit cum voluptatibus inventore quae qui provident eveniet dicta at, quibusdam ipsam iusto reprehenderit hic saepe nesciunt sed illo.
-              </p>
             <ul>
   <li><strong>Effortless Object Removal</strong>: Easily remove unwanted objects or elements from your images with just a few taps, enhancing the overall aesthetics of your photos.</li>
   <li><strong>Advanced Image Autoscaling</strong>: Seamlessly upscale your images up to 4 times their original size without compromising quality, allowing for greater detail and clarity.</li>

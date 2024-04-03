@@ -9,6 +9,8 @@
 	"upscale": "4x-upscaling",
 	"download": "Download",
 	"undo": "Undo",
-	"inpaint_model_download_message": "Need to download a 30MB model file, please wait patiently...",
-	"upscaleing_model_download_message": "Need to download a 70MB model file, please wait patiently..."
+	"inpaint_model_download_message": "Customizing your session, please wait ...",
+	// "inpaint_model_download_message": "Need to download a 30MB model file, please wait patiently...",
+	// "upscaleing_model_download_message": "Need to download a 70MB model file, please wait patiently..."
+	 "upscaleing_model_download_message": "Customizing your session, please wait ..."
 }
