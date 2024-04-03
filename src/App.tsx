@@ -133,7 +133,9 @@ function App() {
             </div>
             <h1 className={`text-2xl font-bold mb-4 text-center ${index === 1 ? 'underline' : ''} ${index === 2 ? 'underline text-blue-500' : ''}`}>{title}</h1>
             <hr className="mb-4"/>
-            <p className="text-gray-600 mb-4">Lorem ipsum dolor   sit amet, consectetur adipisicing elit. Sapiente harum voluptatum, sit cum voluptatibus inventore quae qui provident eveniet dicta at, quibusdam ipsam iusto reprehenderit hic saepe nesciunt sed illo.</p>
+            <p className="text-gray-600 mb-4">
+              Lorem ipsum dolor   sit amet, consectetur adipisicing elit. Sapiente harum voluptatum, sit cum voluptatibus inventore quae qui provident eveniet dicta at, quibusdam ipsam iusto reprehenderit hic saepe nesciunt sed illo.
+              </p>
             <hr className="mb-4"/>
             <div className="flex justify-between items-center">
               <div className="text-2xl font-bold">
