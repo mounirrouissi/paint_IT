@@ -409,7 +409,9 @@ export default function Editor(props: EditorProps) {
                   fontSize: '12px',
                   textAlign: 'center',
                 }}
-              >
+         
+                <br />
+
                 Back here
               </div>
             </Button>
@@ -617,12 +619,16 @@ const onSuperResolution = useCallback(async () => {
   return (
     <div
       className={[
-        'flex flex-col h-4/5    justify-between overflow-y-hidden ',
+
+        'flex flex-col h-4/5    justify-between  overflow-y-hidden ',
+
         isInpaintingLoading ? 'animate-pulse-fast pointer-events-none' : '',
       ].join(' ')}
     >
      
-    <div className="grid w-full sm:w-screen  sm:grid-rows-4  h-screen   lg:grid-cols-5 lg:justify-center   overflow-hidden"   >
+
+    <div className="grid w-full sm:w-screen  sm:grid-rows-4  h-screen   lg:grid-cols-5 lg:justify-center  overflow-hidden"   >
+
       
      
        {/* canva */}
@@ -632,7 +638,8 @@ const onSuperResolution = useCallback(async () => {
             'Canva',
             'row-span-3  sm:w-screen lg:order-2 lg:col-span-4 lg:row-span-3 flex items-center justify-center lg:justify-normal lg:ml-40 ',
             'mt-1',
-            '',
+
+
            ].join(' ')}
            style={{
          
