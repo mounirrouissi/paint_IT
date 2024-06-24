@@ -1,4 +1,4 @@
-# React/Spring Boot Bookstore Application
+# React/Spring Boot Inpainting Application
 
 ## Overview
 This application is a full-stack web solution for a bookstore. It features a React frontend, Spring Boot backend, and includes advanced functionalities such as image processing, OAuth2 Google authentication, email-based login/signup, user feedback, and Stripe payment integration.
