@@ -14,12 +14,11 @@ This application is a full-stack web solution for a bookstore. It features a Rea
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
-- JDK 1.8 or later
+- Java 17
 - Maven 3.2+
 - Node.js 10+
 - Angular CLI
 - PostgreSQL
-- AWS Account
 
 ### Installing
 A step by step series of examples that tell you how to get a development environment running.
